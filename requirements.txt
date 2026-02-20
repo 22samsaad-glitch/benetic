@@ -1,0 +1,38 @@
+# FastAPI
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+gunicorn==23.0.0
+
+# Database
+sqlalchemy==2.0.36
+psycopg2-binary==2.9.10
+alembic==1.14.1
+
+# Auth
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt<4.1
+
+# Settings & env
+pydantic-settings==2.7.1
+python-dotenv==1.0.1
+
+# Background jobs
+celery[redis]==5.4.0
+redis==5.2.1
+
+# Rate limiting
+slowapi==0.1.9
+
+# Email & SMS (stubbed for now)
+sendgrid==6.11.0
+twilio==9.4.3
+
+# Utilities
+python-multipart==0.0.20
+email-validator>=2.0.0
+eval_type_backport>=0.2.0
+
+# Testing (dev only)
+# pytest
+# httpx

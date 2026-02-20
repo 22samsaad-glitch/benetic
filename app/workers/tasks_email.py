@@ -1,0 +1,66 @@
+from __future__ import annotations
+import logging
+
+from app.workers.celery_app import celery
+from app.database import SessionLocal
+from app.models.integration import IntegrationConfig
+from app.models.lead import LeadEvent
+from app.integrations.base import EmailMessage
+from app.integrations.email_sendgrid import SendGridProvider, StubEmailProvider
+from app.config import settings
+
+logger = logging.getLogger(__name__)
+
+
+def _get_email_provider(tenant_id: str):
+    """Resolve the email provider for a tenant. Falls back to stub."""
+    db = SessionLocal()
+    try:
+        config = db.query(IntegrationConfig).filter_by(
+            tenant_id=tenant_id, provider="sendgrid", is_active=True
+        ).first()
+        if config and config.credentials.get("api_key"):
+            return SendGridProvider(
+                api_key=config.credentials["api_key"],
+                from_email=config.settings.get("from_email", settings.SENDGRID_FROM_EMAIL),
+            )
+    finally:
+        db.close()
+
+    # Fallback to global config or stub
+    if settings.SENDGRID_API_KEY:
+        return SendGridProvider(api_key=settings.SENDGRID_API_KEY, from_email=settings.SENDGRID_FROM_EMAIL)
+    return StubEmailProvider()
+
+
+@celery.task(bind=True, max_retries=3, default_retry_delay=60)
+def send_email(self, tenant_id: str, lead_id: str, to_email: str, to_name: str, subject: str, html_body: str):
+    """Send an email to a lead."""
+    provider = _get_email_provider(tenant_id)
+    message = EmailMessage(to_email=to_email, to_name=to_name, subject=subject, html_body=html_body)
+
+    result = provider.send(message)
+
+    # Log event
+    db = SessionLocal()
+    try:
+        event = LeadEvent(
+            tenant_id=tenant_id,
+            lead_id=lead_id,
+            event_type="email_sent",
+            metadata_={
+                "subject": subject,
+                "provider_id": result.provider_id,
+                "success": result.success,
+                "error": result.error,
+            },
+        )
+        db.add(event)
+        db.commit()
+    finally:
+        db.close()
+
+    if not result.success:
+        raise self.retry(exc=Exception(result.error))
+
+    return {"provider_id": result.provider_id, "success": True}

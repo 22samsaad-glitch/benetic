@@ -1,0 +1,14 @@
+.env
+.env.local
+credentials.json
+token.json
+.tmp/
+__pycache__/
+*.pyc
+.DS_Store
+*.db
+node_modules/
+frontend/.next/
+frontend/node_modules/
+tools/
+claudevs/
