@@ -1,0 +1,27 @@
+databases:
+  - name: benetic-db
+    databaseName: benetic
+    user: benetic
+    plan: free
+
+services:
+  - type: web
+    name: benetic-backend
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: benetic-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DEBUG
+        value: "false"
+      - key: PYTHONPATH
+        value: "."
+      - key: PYTHON_VERSION
+        value: "3.12.0"
