@@ -1,4 +1,7 @@
 from __future__ import annotations
+import os
+print(f"[startup] DATABASE_URL = {os.getenv('DATABASE_URL', 'NOT SET')}")
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse

@@ -1,17 +1,22 @@
 from __future__ import annotations
 
+import os
 import uuid
 
 from sqlalchemy import String, TypeDecorator, create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-from app.config import settings
+# Read DATABASE_URL directly from environment so Render/Railway vars are
+# guaranteed to be picked up before pydantic-settings is instantiated.
+_db_url = os.getenv("DATABASE_URL", "sqlite:///./jetleads.db")
+if _db_url.startswith("postgres://"):
+    _db_url = _db_url.replace("postgres://", "postgresql://", 1)
 
 connect_args = {}
-if settings.DATABASE_URL.startswith("sqlite"):
+if _db_url.startswith("sqlite"):
     connect_args["check_same_thread"] = False
 
-engine = create_engine(settings.DATABASE_URL, pool_pre_ping=True, connect_args=connect_args)
+engine = create_engine(_db_url, pool_pre_ping=True, connect_args=connect_args)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 

@@ -1,14 +1,20 @@
 from logging.config import fileConfig
+import os
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from app.config import settings
 from app.database import Base
 from app.models import *  # noqa: F401,F403 — ensure all models are loaded
 
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+
+# Always read DATABASE_URL directly from the environment so Render/Railway
+# env vars are picked up even if pydantic-settings hasn't loaded yet.
+_db_url = os.getenv("DATABASE_URL", "sqlite:///./jetleads.db")
+if _db_url.startswith("postgres://"):
+    _db_url = _db_url.replace("postgres://", "postgresql://", 1)
+config.set_main_option("sqlalchemy.url", _db_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
