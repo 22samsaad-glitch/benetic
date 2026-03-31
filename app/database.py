@@ -6,11 +6,15 @@ import uuid
 from sqlalchemy import String, TypeDecorator, create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
+print("RAW DATABASE_URL:", os.environ.get("DATABASE_URL", "NOT FOUND"))
+
 # Read DATABASE_URL directly from environment so Render/Railway vars are
 # guaranteed to be picked up before pydantic-settings is instantiated.
-_db_url = os.getenv("DATABASE_URL", "sqlite:///./jetleads.db")
+_db_url = os.environ.get("DATABASE_URL", "sqlite:///./jetleads.db")
 if _db_url.startswith("postgres://"):
     _db_url = _db_url.replace("postgres://", "postgresql://", 1)
+
+print("RESOLVED DATABASE_URL:", _db_url)
 
 connect_args = {}
 if _db_url.startswith("sqlite"):
