@@ -410,22 +410,23 @@ export default function LandingPage() {
             {/* Eyebrow badge */}
             <div className="inline-flex items-center gap-2 mb-8">
               <div className="flex items-center gap-2 px-4 py-1.5 rounded-full"
-                style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)" }}>
+                style={{ background: "rgba(255,255,255,0.28)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.4)" }}>
                 <svg width="12" height="12" viewBox="0 0 13 13" fill="none">
                   <path d="M6.5 0L7.94 5.06L13 6.5L7.94 7.94L6.5 13L5.06 7.94L0 6.5L5.06 5.06L6.5 0Z" fill="white" />
                 </svg>
-                <span className="text-sm font-medium text-white tracking-wide">5-Minute Lead Response</span>
+                <span className="text-sm font-semibold tracking-wide" style={{ color: "#ffffff", textShadow: "0 0 12px rgba(255,255,255,0.4)" }}>5-Minute Lead Response</span>
               </div>
             </div>
 
             {/* Headline */}
             <h1
-              className="text-white leading-[1.05] mb-6"
+              className="leading-[1.05] mb-6"
               style={{
                 fontSize: 64,
                 fontWeight: 600,
-                letterSpacing: "-2px",
+                letterSpacing: "0px",
                 fontFamily: "'Inter', sans-serif",
+                color: "#ffffff",
               }}
             >
               Contact every lead<br />in 5 minutes.
@@ -434,7 +435,7 @@ export default function LandingPage() {
             {/* Subheading */}
             <p
               className="mx-auto mb-10"
-              style={{ fontSize: 16, fontWeight: 400, color: "rgba(255,255,255,0.78)", lineHeight: 1.65, maxWidth: 500 }}
+              style={{ fontSize: 16, fontWeight: 400, color: "rgba(255,255,255,0.90)", lineHeight: 1.65, maxWidth: 500 }}
             >
               Jetleads contacts your contractor leads within 5 minutes of them coming in — automatically, every time. No more slow follow-up. No more lost jobs.
             </p>
