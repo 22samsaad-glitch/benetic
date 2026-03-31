@@ -14,18 +14,11 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
-_raw_url = os.environ.get("DATABASE_URL", "")
-if not _raw_url:
-    raise RuntimeError("DATABASE_URL environment variable is not set")
-if _raw_url.startswith("postgres://"):
-    _raw_url = _raw_url.replace("postgres://", "postgresql://", 1)
-
-print("ALEMBIC CONNECTING TO:", _raw_url[:40], "...")
-
 
 def run_migrations_offline() -> None:
+    url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=_raw_url,
+        url=url,
         target_metadata=target_metadata,
         literal_binds=True,
     )
@@ -34,7 +27,15 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    connectable = create_engine(_raw_url, poolclass=pool.NullPool)
+    raw_url = os.environ.get("DATABASE_URL", "")
+    if not raw_url:
+        raise RuntimeError("DATABASE_URL is not set")
+    if raw_url.startswith("postgres://"):
+        raw_url = raw_url.replace("postgres://", "postgresql://", 1)
+
+    print("ALEMBIC CONNECTING TO:", raw_url[:40], "...")
+
+    connectable = create_engine(raw_url, poolclass=pool.NullPool)
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
         with context.begin_transaction():
