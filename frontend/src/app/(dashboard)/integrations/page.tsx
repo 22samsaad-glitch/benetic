@@ -26,7 +26,7 @@ const PROVIDERS = [
     name: "SendGrid",
     description: "Send transactional and marketing emails",
     icon: Mail,
-    color: "text-blue-600 bg-blue-100",
+    color: "text-primary bg-secondary",
     fields: [{ key: "api_key", label: "API Key", type: "password" }],
   },
   {
@@ -54,7 +54,7 @@ const PROVIDERS = [
     name: "Meta Lead Ads",
     description: "Capture leads from Facebook & Instagram ads",
     icon: Share2,
-    color: "text-indigo-600 bg-indigo-100",
+    color: "text-primary bg-secondary",
     fields: [
       { key: "page_id", label: "Page ID", type: "text" },
       { key: "access_token", label: "Access Token", type: "password" },
@@ -133,10 +133,10 @@ export default function IntegrationsPage() {
       </div>
 
       {/* Webhook URL Card */}
-      <Card className="border-blue-200 bg-blue-50/50">
+      <Card className="border-secondary bg-secondary/50">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="rounded-lg p-2.5 text-blue-600 bg-blue-100">
+            <div className="rounded-lg p-2.5 text-primary bg-secondary">
               <Webhook className="h-5 w-5" />
             </div>
             <div>
@@ -147,7 +147,7 @@ export default function IntegrationsPage() {
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex items-center gap-2">
-            <code className="flex-1 text-xs bg-white rounded-lg border p-2.5 break-all font-mono text-gray-700">
+            <code className="flex-1 text-xs bg-background rounded-lg border p-2.5 break-all font-mono text-foreground">
               {webhookUrl}
             </code>
             <Button variant="outline" size="sm" onClick={copyWebhookUrl}>
@@ -155,7 +155,7 @@ export default function IntegrationsPage() {
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            POST JSON with: email, phone, first_name, last_name, source. Include <code className="font-mono bg-white px-1 rounded">X-API-Key</code> header.
+            POST JSON with: email, phone, first_name, last_name, source. Include <code className="font-mono bg-muted px-1 rounded">X-API-Key</code> header.
           </p>
         </CardContent>
       </Card>

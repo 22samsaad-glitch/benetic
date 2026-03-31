@@ -1,7 +1,7 @@
 # Workflow: Deploy Lead Management System
 
 ## Objective
-Deploy the Benetic lead management API to a production environment (Railway or Render).
+Deploy the Jetleads lead management API to a production environment (Railway or Render).
 
 ## Inputs
 - Docker image built from the project root

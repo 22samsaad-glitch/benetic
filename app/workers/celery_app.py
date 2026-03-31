@@ -5,7 +5,7 @@ from celery.schedules import crontab
 from app.config import settings
 
 celery = Celery(
-    "benetic",
+    "jetleads",
     broker=settings.REDIS_URL,
     backend=settings.REDIS_URL,
     include=[

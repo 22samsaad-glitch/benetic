@@ -123,3 +123,11 @@ def refresh(payload: RefreshRequest, db: Session = Depends(get_db)):
 @router.get("/me", response_model=UserOut)
 def me(user: User = Depends(get_current_user)):
     return user
+
+
+@router.get("/me/tenant", response_model=TenantOut)
+def me_tenant(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    tenant = db.query(Tenant).filter_by(id=user.tenant_id).first()
+    if not tenant:
+        raise HTTPException(404, "Tenant not found")
+    return tenant

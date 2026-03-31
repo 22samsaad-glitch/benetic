@@ -1,5 +1,5 @@
 /**
- * Benetic Lead Capture Widget
+ * Jetleads Lead Capture Widget
  *
  * Usage:
  *   <script src="https://your-domain.com/embed/lead-form.js"
@@ -7,7 +7,7 @@
  *           data-api-key="your-webhook-key"
  *           data-api-url="https://your-api.com">
  *   </script>
- *   <div id="benetic-lead-form"></div>
+ *   <div id="jetleads-lead-form"></div>
  */
 (function () {
   const script = document.currentScript;
@@ -16,13 +16,13 @@
   const apiUrl = (script.getAttribute("data-api-url") || "").replace(/\/$/, "");
 
   if (!tenant || !apiKey || !apiUrl) {
-    console.error("[Benetic] Missing data-tenant, data-api-key, or data-api-url.");
+    console.error("[Jetleads] Missing data-tenant, data-api-key, or data-api-url.");
     return;
   }
 
-  const container = document.getElementById("benetic-lead-form");
+  const container = document.getElementById("jetleads-lead-form");
   if (!container) {
-    console.error("[Benetic] No element with id='benetic-lead-form' found.");
+    console.error("[Jetleads] No element with id='jetleads-lead-form' found.");
     return;
   }
 
@@ -35,18 +35,18 @@
 
   // Build form
   container.innerHTML =
-    '<form id="benetic-form" style="max-width:400px;font-family:sans-serif">' +
+    '<form id="jetleads-form" style="max-width:400px;font-family:sans-serif">' +
     '<input name="first_name" placeholder="First name" style="width:100%;padding:8px;margin:4px 0;box-sizing:border-box">' +
     '<input name="last_name" placeholder="Last name" style="width:100%;padding:8px;margin:4px 0;box-sizing:border-box">' +
     '<input name="email" type="email" placeholder="Email" required style="width:100%;padding:8px;margin:4px 0;box-sizing:border-box">' +
     '<input name="phone" type="tel" placeholder="Phone" style="width:100%;padding:8px;margin:4px 0;box-sizing:border-box">' +
     '<button type="submit" style="width:100%;padding:10px;margin:8px 0;background:#2563eb;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:16px">Get Started</button>' +
-    '<p id="benetic-msg" style="text-align:center;margin:4px 0;font-size:14px"></p>' +
+    '<p id="jetleads-msg" style="text-align:center;margin:4px 0;font-size:14px"></p>' +
     "</form>";
 
-  document.getElementById("benetic-form").addEventListener("submit", function (e) {
+  document.getElementById("jetleads-form").addEventListener("submit", function (e) {
     e.preventDefault();
-    var msg = document.getElementById("benetic-msg");
+    var msg = document.getElementById("jetleads-msg");
     var fd = new FormData(e.target);
     var body = Object.assign(
       {

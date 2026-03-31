@@ -19,8 +19,8 @@ const INTEGRATIONS: Integration[] = [
     name: "SendGrid",
     description: "Send automated emails and track opens, clicks, and deliveries.",
     icon: <Mail className="w-6 h-6" />,
-    color: "text-blue-600",
-    bgColor: "bg-blue-100",
+    color: "text-primary",
+    bgColor: "bg-secondary",
   },
   {
     id: "twilio",
@@ -35,7 +35,7 @@ const INTEGRATIONS: Integration[] = [
     name: "Meta Lead Ads",
     description: "Automatically import leads from your Facebook and Instagram campaigns.",
     icon: <Facebook className="w-6 h-6" />,
-    color: "text-indigo-600",
+    color: "text-primary",
     bgColor: "bg-indigo-100",
   },
   {
@@ -69,11 +69,11 @@ export default function StepIntegrations({ data, onUpdate }: StepIntegrationsPro
   return (
     <div className="space-y-8">
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 mb-2">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100 text-primary mb-2">
           <ExternalLink className="w-6 h-6" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900">Connect your tools</h2>
-        <p className="text-gray-500">
+        <h2 className="text-2xl font-bold text-foreground">Connect your tools</h2>
+        <p className="text-muted-foreground">
           Power up your workflows by connecting your favorite services.
         </p>
       </div>
@@ -88,7 +88,7 @@ export default function StepIntegrations({ data, onUpdate }: StepIntegrationsPro
                 "flex items-center gap-4 p-4 rounded-xl border-2 transition-all duration-200",
                 isConnected
                   ? "border-emerald-300 bg-emerald-50"
-                  : "border-gray-200 bg-white hover:border-gray-300"
+                  : "border-border bg-card hover:border-muted-foreground/40"
               )}
             >
               <div
@@ -101,8 +101,8 @@ export default function StepIntegrations({ data, onUpdate }: StepIntegrationsPro
                 {integration.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900">{integration.name}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{integration.description}</p>
+                <p className="text-sm font-semibold text-foreground">{integration.name}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{integration.description}</p>
               </div>
               <div className="shrink-0">
                 {isConnected ? (
@@ -131,7 +131,7 @@ export default function StepIntegrations({ data, onUpdate }: StepIntegrationsPro
         })}
       </div>
 
-      <p className="text-xs text-center text-gray-400">
+      <p className="text-xs text-center text-muted-foreground">
         All integrations are optional. You can always set these up later in Settings.
       </p>
     </div>

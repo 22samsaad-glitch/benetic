@@ -63,8 +63,8 @@ export default function StepSuccess({ data, onCreateTestLead, testLeadCreated }:
           transition={{ delay: 0.5 }}
           className="space-y-2"
         >
-          <h2 className="text-3xl font-bold text-gray-900">You&apos;re all set!</h2>
-          <p className="text-gray-500 text-lg">
+          <h2 className="text-3xl font-bold text-foreground">You&apos;re all set!</h2>
+          <p className="text-muted-foreground text-lg">
             {data.companyName
               ? `${data.companyName} is ready to convert leads on autopilot.`
               : "Your automated follow-up is ready to go."}
@@ -76,17 +76,17 @@ export default function StepSuccess({ data, onCreateTestLead, testLeadCreated }:
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7 }}
-        className="rounded-xl bg-white border border-gray-200 shadow-sm p-5 space-y-3"
+        className="rounded-xl bg-card border border-border shadow-card p-5 space-y-3"
       >
-        <p className="text-sm font-semibold text-gray-900">Your follow-up sequence</p>
+        <p className="text-sm font-semibold text-foreground">Your follow-up sequence</p>
         <div className="space-y-2">
           {enabledMessages.map((msg, i) => (
             <div key={msg.id} className="flex items-center gap-3 text-sm">
-              <span className="shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">
+              <span className="shrink-0 w-6 h-6 rounded-full bg-secondary text-primary flex items-center justify-center text-xs font-bold">
                 {i + 1}
               </span>
-              <span className="text-gray-700">{msg.label}</span>
-              <span className="text-xs text-gray-400 ml-auto">
+              <span className="text-foreground">{msg.label}</span>
+              <span className="text-xs text-muted-foreground ml-auto">
                 {msg.channel === "email" ? "Email" : "SMS"}
                 {msg.delayMinutes > 0 && (
                   <>
@@ -126,7 +126,7 @@ export default function StepSuccess({ data, onCreateTestLead, testLeadCreated }:
         )}
 
         <Link href="/leads">
-          <Button className="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/25">
+          <Button className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90">
             Go to Dashboard
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>

@@ -52,7 +52,7 @@ export default function StepTemplates({ data, onUpdate }: StepTemplatesProps) {
     PLACEHOLDER_VARIABLES.forEach((v) => {
       result = result.replace(
         new RegExp(`\\{\\{${v.label}\\}\\}`, "g"),
-        `<span class="bg-blue-100 text-blue-700 px-1 rounded font-medium">${v.example}</span>`
+        `<span class="bg-secondary text-blue-700 px-1 rounded font-medium">${v.example}</span>`
       );
     });
     return result;
@@ -74,8 +74,8 @@ export default function StepTemplates({ data, onUpdate }: StepTemplatesProps) {
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-100 text-amber-600 mb-2">
           <Mail className="w-6 h-6" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900">Create your first template</h2>
-        <p className="text-gray-500">
+        <h2 className="text-2xl font-bold text-foreground">Create your first template</h2>
+        <p className="text-muted-foreground">
           Build an email template to reach out to your leads quickly.
         </p>
       </div>
@@ -129,12 +129,12 @@ export default function StepTemplates({ data, onUpdate }: StepTemplatesProps) {
 
         {/* Variable chips */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-gray-500">Insert variable:</span>
+          <span className="text-xs text-muted-foreground">Insert variable:</span>
           {PLACEHOLDER_VARIABLES.map((v) => (
             <Badge
               key={v.label}
               variant="outline"
-              className="cursor-pointer hover:bg-blue-50 hover:border-blue-300 transition-colors text-xs"
+              className="cursor-pointer hover:bg-muted hover:border-primary/30 transition-colors text-xs"
               onClick={() => insertVariable(v.label, "templateBody")}
             >
               {`{{${v.label}}}`}
@@ -152,7 +152,7 @@ export default function StepTemplates({ data, onUpdate }: StepTemplatesProps) {
               variant="ghost"
               size="sm"
               onClick={() => setShowPreview(!showPreview)}
-              className="text-xs text-gray-500 h-7"
+              className="text-xs text-muted-foreground h-7"
             >
               {showPreview ? (
                 <>
@@ -169,9 +169,9 @@ export default function StepTemplates({ data, onUpdate }: StepTemplatesProps) {
           </div>
 
           {showPreview ? (
-            <div className="min-h-[200px] p-4 rounded-xl border border-gray-200 bg-white text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
-              <div className="mb-3 pb-3 border-b border-gray-100">
-                <span className="text-xs text-gray-400">Subject: </span>
+            <div className="min-h-[200px] p-4 rounded-xl border border-border bg-background text-sm text-foreground whitespace-pre-wrap leading-relaxed">
+              <div className="mb-3 pb-3 border-b border-border">
+                <span className="text-xs text-muted-foreground">Subject: </span>
                 <span
                   dangerouslySetInnerHTML={{
                     __html: renderPreview(data.templateSubject || "(no subject)"),

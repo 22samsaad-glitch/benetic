@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class ResendProvider(EmailProvider):
-    def __init__(self, api_key: str, from_email: str = "noreply@benetic.com"):
+    def __init__(self, api_key: str, from_email: str = "noreply@jetleads.io"):
         self.api_key = api_key
         self.from_email = from_email
 

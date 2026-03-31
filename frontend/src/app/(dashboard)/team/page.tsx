@@ -38,7 +38,7 @@ import { getInitials } from "@/lib/utils";
 const ROLE_CONFIG = {
   owner: { label: "Owner", icon: ShieldAlert, color: "bg-amber-100 text-amber-800" },
   admin: { label: "Admin", icon: Shield, color: "bg-blue-100 text-blue-800" },
-  member: { label: "Member", icon: UserIcon, color: "bg-gray-100 text-gray-800" },
+  member: { label: "Member", icon: UserIcon, color: "bg-muted text-muted-foreground" },
 };
 
 export default function TeamPage() {
@@ -99,7 +99,7 @@ export default function TeamPage() {
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
         </div>
       ) : (
-        <div className="rounded-md border">
+        <div className="rounded-xl border">
           <table className="w-full">
             <thead>
               <tr className="border-b bg-muted/50">

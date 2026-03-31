@@ -26,15 +26,10 @@ export default function StepLaunch({ data }: StepLaunchProps) {
 
   useEffect(() => {
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-
-    const handleResize = () => {
+    const handleResize = () =>
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    };
     window.addEventListener("resize", handleResize);
-
-    // Stop confetti after 5 seconds
     const timer = setTimeout(() => setShowConfetti(false), 5000);
-
     return () => {
       window.removeEventListener("resize", handleResize);
       clearTimeout(timer);
@@ -47,28 +42,19 @@ export default function StepLaunch({ data }: StepLaunchProps) {
 
   const summaryItems = [
     {
-      icon: <Layers className="w-5 h-5" />,
+      icon: <Layers className="w-4 h-4" />,
       label: "Pipeline",
       value: `${nonTerminalStages.length} stages configured`,
-      color: "text-violet-600",
-      bgColor: "bg-violet-100",
     },
     {
-      icon: <Mail className="w-5 h-5" />,
+      icon: <Mail className="w-4 h-4" />,
       label: "Template",
       value: hasTemplate ? `"${data.templateName}" created` : "Skipped",
-      color: "text-amber-600",
-      bgColor: "bg-amber-100",
     },
     {
-      icon: <Plug className="w-5 h-5" />,
+      icon: <Plug className="w-4 h-4" />,
       label: "Integrations",
-      value:
-        integrationCount > 0
-          ? `${integrationCount} connected`
-          : "None connected yet",
-      color: "text-indigo-600",
-      bgColor: "bg-indigo-100",
+      value: integrationCount > 0 ? `${integrationCount} connected` : "None connected yet",
     },
   ];
 
@@ -79,80 +65,68 @@ export default function StepLaunch({ data }: StepLaunchProps) {
           width={windowSize.width}
           height={windowSize.height}
           recycle={false}
-          numberOfPieces={300}
+          numberOfPieces={250}
           gravity={0.15}
-          colors={["#3b82f6", "#10b981", "#8b5cf6", "#f59e0b", "#ec4899"]}
+          colors={["#2563EB", "#10b981", "#8b5cf6", "#f59e0b"]}
           style={{ position: "fixed", top: 0, left: 0, zIndex: 100, pointerEvents: "none" }}
         />
       )}
 
       <div className="text-center space-y-4">
         <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-          className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-100"
+          className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-50 border-2 border-emerald-100"
         >
-          <CheckCircle2 className="w-12 h-12 text-emerald-600" />
+          <CheckCircle2 className="w-10 h-10 text-emerald-500" />
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="space-y-2"
+          transition={{ delay: 0.4 }}
+          className="space-y-1.5"
         >
-          <h2 className="text-3xl font-bold text-gray-900">You&apos;re all set!</h2>
-          <p className="text-gray-500 text-lg">
-            {data.companyName
-              ? `${data.companyName} is ready to go.`
-              : "Your workspace is ready to go."}
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">You&apos;re all set!</h2>
+          <p className="text-sm text-muted-foreground">
+            {data.companyName ? `${data.companyName} is ready to go.` : "Your workspace is ready."}
           </p>
         </motion.div>
       </div>
 
-      {/* Summary Cards */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
-        className="space-y-3"
+        transition={{ delay: 0.6 }}
+        className="bg-card rounded-2xl border border-border shadow-card overflow-hidden"
       >
         {summaryItems.map((item, index) => (
-          <motion.div
+          <div
             key={item.label}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.8 + index * 0.15 }}
-            className="flex items-center gap-4 p-4 rounded-xl bg-white border border-gray-200 shadow-sm"
+            className="flex items-center gap-4 px-5 py-4 border-b border-border last:border-0"
           >
-            <div
-              className={`shrink-0 w-10 h-10 rounded-lg ${item.bgColor} ${item.color} flex items-center justify-center`}
-            >
+            <div className="shrink-0 w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
               {item.icon}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">
-                {item.label}
-              </p>
-              <p className="text-sm font-semibold text-gray-900">{item.value}</p>
+              <p className="text-xs font-medium text-muted-foreground">{item.label}</p>
+              <p className="text-sm font-semibold text-foreground">{item.value}</p>
             </div>
-            <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-          </motion.div>
+            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+          </div>
         ))}
       </motion.div>
 
-      {/* CTA */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.3 }}
-        className="pt-4"
+        transition={{ delay: 0.9 }}
       >
         <Link href="/leads">
-          <Button className="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/25">
+          <Button className="w-full h-12 rounded-xl font-semibold text-base">
             Go to Dashboard
-            <ArrowRight className="w-5 h-5 ml-2" />
+            <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </Link>
       </motion.div>

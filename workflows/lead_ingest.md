@@ -5,7 +5,7 @@ Set up lead capture from website forms, Meta Lead Ads, and Google Ads for a new 
 
 ## Inputs
 - Tenant slug and webhook API key (from /api/v1/auth/register response)
-- API base URL (e.g., https://api.benetic.com)
+- API base URL (e.g., https://api.jetleads.io)
 - Meta Business Manager access (for Meta Lead Ads)
 - Google Ads account (for Google Ads lead forms)
 
@@ -17,16 +17,16 @@ Set up lead capture from website forms, Meta Lead Ads, and Google Ads for a new 
    <script src="https://your-domain.com/embed/lead-form.js"
            data-tenant="TENANT_SLUG"
            data-api-key="WEBHOOK_KEY"
-           data-api-url="https://api.benetic.com">
+           data-api-url="https://api.jetleads.io">
    </script>
-   <div id="benetic-lead-form"></div>
+   <div id="jetleads-lead-form"></div>
    ```
 2. **Test** — Submit the form and verify the lead appears via GET /api/v1/leads/
 3. **UTM tracking** — The widget automatically captures UTM params from the page URL
 
 ### 2. Meta Lead Ads
 1. **Create a Meta App** at developers.facebook.com
-2. **Set webhook URL** to: `https://api.benetic.com/api/v1/webhooks/meta/TENANT_SLUG`
+2. **Set webhook URL** to: `https://api.jetleads.io/api/v1/webhooks/meta/TENANT_SLUG`
 3. **Set verify token** to match META_APP_SECRET in .env
 4. **Subscribe to leadgen events** on the Facebook Page
 5. **Test** — Create a test lead in Meta Ads Manager and verify it arrives
@@ -34,14 +34,14 @@ Set up lead capture from website forms, Meta Lead Ads, and Google Ads for a new 
 
 ### 3. Google Ads
 1. **Create a webhook integration** in Google Ads for lead form extensions
-2. **Set webhook URL** to: `https://api.benetic.com/api/v1/webhooks/google-ads/TENANT_SLUG`
+2. **Set webhook URL** to: `https://api.jetleads.io/api/v1/webhooks/google-ads/TENANT_SLUG`
 3. **Set X-API-Key header** to the tenant's webhook key
 4. **Test** — Submit a test lead form and verify
 
 ### 4. Custom / Zapier
 1. **Any system** can POST to the universal endpoint:
    ```
-   POST https://api.benetic.com/api/v1/webhooks/ingest/TENANT_SLUG
+   POST https://api.jetleads.io/api/v1/webhooks/ingest/TENANT_SLUG
    Headers: X-API-Key: WEBHOOK_KEY, Content-Type: application/json
    Body: {"email": "...", "first_name": "...", "source": "zapier"}
    ```

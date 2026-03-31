@@ -1,10 +1,19 @@
 from __future__ import annotations
 from pydantic_settings import BaseSettings
+from pydantic import field_validator
 
 
 class Settings(BaseSettings):
     # Database
-    DATABASE_URL: str = "sqlite:///./benetic.db"
+    DATABASE_URL: str = "sqlite:///./jetleads.db"
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def fix_postgres_url(cls, v: str) -> str:
+        # Railway provides postgres:// but SQLAlchemy requires postgresql://
+        if isinstance(v, str) and v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql://", 1)
+        return v
 
     # Redis
     REDIS_URL: str = "redis://localhost:6379/0"
@@ -22,7 +31,7 @@ class Settings(BaseSettings):
 
     # Email (stubbed)
     SENDGRID_API_KEY: str = ""
-    SENDGRID_FROM_EMAIL: str = "noreply@benetic.com"
+    SENDGRID_FROM_EMAIL: str = "noreply@jetleads.io"
 
     # SMS (stubbed)
     TWILIO_ACCOUNT_SID: str = ""
@@ -32,8 +41,14 @@ class Settings(BaseSettings):
     # Meta Lead Ads
     META_APP_SECRET: str = ""
 
+    # AI
+    ANTHROPIC_API_KEY: str = ""
+
+    # Frontend URL (used for CORS in production)
+    FRONTEND_URL: str = ""
+
     # App
-    APP_NAME: str = "Benetic Lead Management"
+    APP_NAME: str = "Jetleads"
     DEBUG: bool = False
 
     model_config = {"env_file": ".env", "extra": "ignore"}

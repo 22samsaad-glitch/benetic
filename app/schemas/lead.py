@@ -48,6 +48,7 @@ class LeadOut(BaseModel):
     custom_fields: dict
     is_duplicate: bool
     opted_out: bool
+    qualification_status: str
     created_at: datetime
     updated_at: datetime
 

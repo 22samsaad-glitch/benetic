@@ -32,6 +32,16 @@ class Lead(Base):
     is_duplicate: Mapped[bool] = mapped_column(Boolean, default=False)
     duplicate_of: Mapped[Optional[uuid.UUID]] = mapped_column(GUID(), ForeignKey("leads.id"), nullable=True)
     opted_out: Mapped[bool] = mapped_column(Boolean, default=False)
+    # Jetleads qualification status
+    # pending → qualification check not yet run
+    # qualified → passed rules, full sequence started
+    # disqualified → did not match rules, single polite message sent
+    # needs_review → insufficient info, clarification question sent
+    # in_sequence → actively in follow-up sequence
+    # responded → lead replied
+    # closed → won or lost, sequence complete
+    # unresponsive → all follow-ups exhausted, no reply
+    qualification_status: Mapped[str] = mapped_column(String(20), default="pending", nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 

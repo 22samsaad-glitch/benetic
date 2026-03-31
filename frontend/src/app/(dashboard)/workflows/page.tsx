@@ -209,7 +209,7 @@ export default function WorkflowsPage() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-48 animate-pulse rounded-lg border bg-muted"
+              className="h-48 animate-pulse rounded-xl border bg-muted"
             />
           ))}
         </div>
@@ -222,12 +222,12 @@ export default function WorkflowsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Follow-up Sequences</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-xl font-bold tracking-tight">Follow-up Sequences</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">
             Automated sequences that respond to new leads instantly.
           </p>
         </div>
-        <Button onClick={handleOpenCreate}>
+        <Button onClick={handleOpenCreate} className="rounded-xl">
           <Plus className="mr-2 h-4 w-4" />
           Create Sequence
         </Button>
@@ -235,19 +235,19 @@ export default function WorkflowsPage() {
 
       {/* Workflow Grid */}
       {!workflowList || workflowList.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-16">
-            <WorkflowIcon className="h-12 w-12 text-muted-foreground/50" />
-            <h3 className="mt-4 text-lg font-semibold">No sequences yet</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Create your first follow-up sequence to respond to leads automatically.
-            </p>
-            <Button onClick={handleOpenCreate} className="mt-4">
-              <Plus className="mr-2 h-4 w-4" />
-              Create Sequence
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mb-4">
+            <WorkflowIcon className="h-6 w-6 text-muted-foreground" />
+          </div>
+          <h3 className="text-base font-semibold">No sequences yet</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Create your first follow-up sequence to respond to leads automatically.
+          </p>
+          <Button onClick={handleOpenCreate} className="mt-4 rounded-xl">
+            <Plus className="mr-2 h-4 w-4" />
+            Create Sequence
+          </Button>
+        </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence>
@@ -350,7 +350,7 @@ export default function WorkflowsPage() {
                                     return (
                                       <div
                                         key={step.id || idx}
-                                        className="flex items-center gap-3 rounded-md border p-3"
+                                        className="flex items-center gap-3 rounded-xl border p-3"
                                       >
                                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
                                           <StepIcon className="h-4 w-4" />
@@ -494,7 +494,7 @@ export default function WorkflowsPage() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="flex items-center gap-3 rounded-lg border p-3"
+                      className="flex items-center gap-3 rounded-xl border p-3"
                     >
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground">
                         <StepIcon className="h-4 w-4" />

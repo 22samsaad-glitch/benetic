@@ -90,14 +90,14 @@ export default function PipelinesPage() {
       {/* Page header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-border flex-shrink-0">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold tracking-tight">Pipeline</h1>
+          <h1 className="text-xl font-bold tracking-tight">Pipeline</h1>
 
           {/* Pipeline selector */}
           {pipelineList && pipelineList.length > 1 && (
             <select
               value={activePipelineId ?? ""}
               onChange={(e) => setSelectedPipelineId(e.target.value)}
-              className="h-9 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
+              className="h-9 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
             >
               {pipelineList.map((p: Pipeline) => (
                 <option key={p.id} value={p.id}>
@@ -110,6 +110,7 @@ export default function PipelinesPage() {
 
         <Button
           size="sm"
+          className="rounded-xl"
           onClick={() => setAddStageOpen(true)}
           disabled={!activePipelineId}
         >

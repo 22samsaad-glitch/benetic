@@ -117,8 +117,15 @@ export default function TemplatesPage() {
 
   const renderTemplateGrid = (list: MessageTemplate[]) =>
     list.length === 0 ? (
-      <div className="text-center py-12 text-muted-foreground">
-        <p>No templates yet</p>
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <p className="text-base font-medium text-foreground mb-2">No templates yet</p>
+        <p className="text-sm text-muted-foreground max-w-sm leading-relaxed mb-6">
+          Templates are the messages your leads receive. Create your first template and attach it to a sequence — Jetleads will send it automatically when a new lead comes in.
+        </p>
+        <Button onClick={() => { resetForm(); setCreateOpen(true); }}>
+          <Plus className="mr-2 h-4 w-4" />
+          Create your first template
+        </Button>
       </div>
     ) : (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -194,7 +201,7 @@ export default function TemplatesPage() {
       </Tabs>
 
       <Dialog open={createOpen} onOpenChange={resetForm}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl" hideClose>
           <DialogHeader>
             <DialogTitle>{editingTemplate ? "Edit Template" : "Create Template"}</DialogTitle>
             <DialogDescription>
@@ -236,7 +243,7 @@ export default function TemplatesPage() {
                 </Button>
               </div>
               {showPreview ? (
-                <div className="rounded-md border p-4 min-h-[120px] text-sm whitespace-pre-wrap">
+                <div className="rounded-xl border p-4 min-h-[120px] text-sm whitespace-pre-wrap">
                   {channel === "email" && subject && (
                     <p className="font-medium mb-2">{renderPreview(subject)}</p>
                   )}

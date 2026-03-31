@@ -20,7 +20,7 @@ interface StepPipelineProps {
 }
 
 const STAGE_COLORS = [
-  "bg-blue-500",
+  "bg-muted0",
   "bg-cyan-500",
   "bg-violet-500",
   "bg-amber-500",
@@ -90,14 +90,14 @@ export default function StepPipeline({ data, onUpdate }: StepPipelineProps) {
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-violet-100 text-violet-600 mb-2">
           <GitBranch className="w-6 h-6" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900">Design your pipeline</h2>
-        <p className="text-gray-500">
+        <h2 className="text-2xl font-bold text-foreground">Design your pipeline</h2>
+        <p className="text-muted-foreground">
           Define the stages your leads move through. Click any stage name to rename it.
         </p>
       </div>
 
       {/* Visual Pipeline Flow */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+      <div className="bg-card rounded-2xl border border-border p-6 shadow-card">
         <div className="flex items-center gap-1 overflow-x-auto pb-2">
           {stages.map((stage, index) => (
             <div key={stage.id} className="flex items-center shrink-0">
@@ -125,8 +125,8 @@ export default function StepPipeline({ data, onUpdate }: StepPipelineProps) {
                   className={cn(
                     "relative px-4 py-2.5 rounded-xl border-2 transition-all duration-200 min-w-[100px] text-center",
                     editingId === stage.id
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300 cursor-pointer hover:bg-gray-50"
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-muted-foreground/40 cursor-pointer hover:bg-muted/40"
                   )}
                 >
                   {editingId === stage.id ? (
@@ -142,7 +142,7 @@ export default function StepPipeline({ data, onUpdate }: StepPipelineProps) {
                     <button
                       type="button"
                       onClick={() => startEdit(stage)}
-                      className="text-sm font-medium text-gray-700 w-full"
+                      className="text-sm font-medium text-foreground w-full"
                     >
                       {stage.name}
                     </button>
@@ -171,27 +171,27 @@ export default function StepPipeline({ data, onUpdate }: StepPipelineProps) {
                 </div>
 
                 {/* Position label */}
-                <span className="text-[10px] text-gray-400 mt-1.5 font-medium uppercase tracking-wider">
+                <span className="text-[10px] text-muted-foreground mt-1.5 font-medium uppercase tracking-wider">
                   {stage.isTerminal ? "End" : `Step ${index + 1}`}
                 </span>
               </div>
 
               {/* Arrow between stages */}
               {index < stages.length - 1 && (
-                <ArrowRight className="w-4 h-4 text-gray-300 mx-1 shrink-0" />
+                <ArrowRight className="w-4 h-4 text-border mx-1 shrink-0" />
               )}
             </div>
           ))}
         </div>
 
         {/* Add Stage button */}
-        <div className="flex justify-center mt-6 pt-4 border-t border-gray-100">
+        <div className="flex justify-center mt-6 pt-4 border-t border-border">
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={addStage}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-muted-foreground hover:text-foreground"
           >
             <Plus className="w-4 h-4 mr-1.5" />
             Add Stage
@@ -199,7 +199,7 @@ export default function StepPipeline({ data, onUpdate }: StepPipelineProps) {
         </div>
       </div>
 
-      <p className="text-xs text-center text-gray-400">
+      <p className="text-xs text-center text-muted-foreground">
         You can always customize your pipeline later in Settings.
       </p>
     </div>

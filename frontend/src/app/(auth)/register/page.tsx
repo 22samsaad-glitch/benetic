@@ -6,19 +6,9 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
 
 const registerSchema = z
   .object({
@@ -53,10 +43,10 @@ function getPasswordStrength(password: string): { score: number; label: string; 
   if (/[0-9]/.test(password)) score++;
   if (/[^A-Za-z0-9]/.test(password)) score++;
 
-  if (score <= 1) return { score, label: "Weak", color: "bg-destructive" };
-  if (score <= 2) return { score, label: "Fair", color: "bg-orange-500" };
-  if (score <= 3) return { score, label: "Good", color: "bg-yellow-500" };
-  return { score, label: "Strong", color: "bg-green-500" };
+  if (score <= 1) return { score, label: "Weak", color: "bg-red-400" };
+  if (score <= 2) return { score, label: "Fair", color: "bg-orange-400" };
+  if (score <= 3) return { score, label: "Good", color: "bg-yellow-400" };
+  return { score, label: "Strong", color: "bg-emerald-500" };
 }
 
 export default function RegisterPage() {
@@ -80,7 +70,6 @@ export default function RegisterPage() {
 
   useEffect(() => {
     if (!loading && user) {
-      // New users go to setup, returning users go to leads
       router.push("/setup");
     }
   }, [user, loading, router]);
@@ -96,12 +85,15 @@ export default function RegisterPage() {
         password: data.password,
       });
     } catch (error: unknown) {
-      const err = error as { response?: { data?: { detail?: string | Array<{msg: string}> } } };
-      const detail = err.response?.data?.detail;
+      const err = error as { response?: { data?: { detail?: string | Array<{ msg: string }> } } };
+      if (!err.response) {
+        setApiError("Cannot reach the server. Make sure the backend is running on port 8000.");
+        return;
+      }
+      const detail = err.response.data?.detail;
       let message: string;
       if (Array.isArray(detail)) {
-        const uniqueMsgs = Array.from(new Set(detail.map((e) => e.msg)));
-        message = uniqueMsgs.join(". ");
+        message = Array.from(new Set(detail.map((e) => e.msg))).join(". ");
       } else {
         message = detail || "Registration failed. Please try again.";
       }
@@ -109,130 +101,159 @@ export default function RegisterPage() {
     }
   };
 
-  if (loading || user) {
-    return null;
-  }
+  if (loading || user) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-    >
-      <Card>
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Never lose a lead to slow follow-up</CardTitle>
-          <CardDescription>Set up automated follow-up in 5 minutes</CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent className="space-y-4">
-            {apiError && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                className="rounded-md bg-destructive/10 p-3 text-sm text-destructive"
-              >
-                {apiError}
-              </motion.div>
+    <div className="min-h-screen bg-[#f9fafb] flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-[440px] bg-white rounded-2xl border border-[#e2e8f0] shadow-[0_4px_24px_rgba(0,0,0,0.08)] px-12 py-10">
+
+        {/* Logo */}
+        <div className="flex items-center gap-2 mb-8">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M13 2L4.5 13.5H11L10 22L20.5 10H14L13 2Z" fill="#2563eb" />
+          </svg>
+          <span className="text-[#0f172a] font-bold text-lg tracking-tight">Jetleads</span>
+        </div>
+
+        {/* Heading */}
+        <div className="mb-7">
+          <h1 className="text-[26px] font-bold text-[#0f172a] leading-tight tracking-tight">
+            Create your account
+          </h1>
+          <p className="mt-1.5 text-sm text-[#6b7280]">Set up automated follow-ups in 5 minutes</p>
+        </div>
+
+        {/* API error */}
+        {apiError && (
+          <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
+            {apiError}
+          </div>
+        )}
+
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="owner_name" className="text-sm font-medium text-[#374151]">
+              Full Name
+            </Label>
+            <Input
+              id="owner_name"
+              type="text"
+              placeholder="Jane Smith"
+              autoComplete="name"
+              className="h-12 rounded-lg border-[#e2e8f0] bg-white text-[#0f172a] placeholder:text-[#9ca3af] focus-visible:ring-[#2563eb] focus-visible:border-[#2563eb]"
+              {...register("owner_name")}
+            />
+            {errors.owner_name && (
+              <p className="text-xs text-red-500">{errors.owner_name.message}</p>
             )}
-            <div className="space-y-2">
-              <Label htmlFor="business_name">Company Name</Label>
-              <Input
-                id="business_name"
-                type="text"
-                placeholder="Acme Inc."
-                {...register("business_name")}
-              />
-              {slug && (
-                <p className="text-xs text-muted-foreground">
-                  Your workspace URL: <span className="font-mono">{slug}</span>
-                </p>
-              )}
-              {errors.business_name && (
-                <p className="text-sm text-destructive">{errors.business_name.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="owner_name">Full Name</Label>
-              <Input
-                id="owner_name"
-                type="text"
-                placeholder="Jane Smith"
-                autoComplete="name"
-                {...register("owner_name")}
-              />
-              {errors.owner_name && (
-                <p className="text-sm text-destructive">{errors.owner_name.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="owner_email">Email</Label>
-              <Input
-                id="owner_email"
-                type="email"
-                placeholder="you@company.com"
-                autoComplete="email"
-                {...register("owner_email")}
-              />
-              {errors.owner_email && (
-                <p className="text-sm text-destructive">{errors.owner_email.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="At least 8 characters"
-                autoComplete="new-password"
-                {...register("password")}
-              />
-              {passwordValue.length > 0 && (
-                <div className="space-y-1">
-                  <div className="flex gap-1">
-                    {[1, 2, 3, 4, 5].map((level) => (
-                      <div
-                        key={level}
-                        className={`h-1.5 flex-1 rounded-full transition-colors ${
-                          level <= strength.score ? strength.color : "bg-muted"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-xs text-muted-foreground">{strength.label}</p>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="owner_email" className="text-sm font-medium text-[#374151]">
+              Email
+            </Label>
+            <Input
+              id="owner_email"
+              type="email"
+              placeholder="you@company.com"
+              autoComplete="email"
+              className="h-12 rounded-lg border-[#e2e8f0] bg-white text-[#0f172a] placeholder:text-[#9ca3af] focus-visible:ring-[#2563eb] focus-visible:border-[#2563eb]"
+              {...register("owner_email")}
+            />
+            {errors.owner_email && (
+              <p className="text-xs text-red-500">{errors.owner_email.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="business_name" className="text-sm font-medium text-[#374151]">
+              Company Name
+            </Label>
+            <Input
+              id="business_name"
+              type="text"
+              placeholder="Acme Inc."
+              className="h-12 rounded-lg border-[#e2e8f0] bg-white text-[#0f172a] placeholder:text-[#9ca3af] focus-visible:ring-[#2563eb] focus-visible:border-[#2563eb]"
+              {...register("business_name")}
+            />
+            {slug && (
+              <p className="text-xs text-[#9ca3af]">
+                Workspace: <span className="font-mono text-[#6b7280]">{slug}</span>
+              </p>
+            )}
+            {errors.business_name && (
+              <p className="text-xs text-red-500">{errors.business_name.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="password" className="text-sm font-medium text-[#374151]">
+              Password
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="At least 8 characters"
+              autoComplete="new-password"
+              className="h-12 rounded-lg border-[#e2e8f0] bg-white text-[#0f172a] placeholder:text-[#9ca3af] focus-visible:ring-[#2563eb] focus-visible:border-[#2563eb]"
+              {...register("password")}
+            />
+            {passwordValue.length > 0 && (
+              <div className="space-y-1 pt-0.5">
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((level) => (
+                    <div
+                      key={level}
+                      className={`h-1 flex-1 rounded-full transition-colors duration-200 ${
+                        level <= strength.score ? strength.color : "bg-gray-200"
+                      }`}
+                    />
+                  ))}
                 </div>
-              )}
-              {errors.password && (
-                <p className="text-sm text-destructive">{errors.password.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                placeholder="Re-enter your password"
-                autoComplete="new-password"
-                {...register("confirmPassword")}
-              />
-              {errors.confirmPassword && (
-                <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
-              )}
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Creating account..." : "Create account"}
-            </Button>
-            <p className="text-sm text-muted-foreground text-center">
-              Already have an account?{" "}
-              <Link href="/login" className="text-primary underline-offset-4 hover:underline">
-                Sign in
-              </Link>
-            </p>
-          </CardFooter>
+                <p className="text-xs text-[#9ca3af]">{strength.label}</p>
+              </div>
+            )}
+            {errors.password && (
+              <p className="text-xs text-red-500">{errors.password.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="confirmPassword" className="text-sm font-medium text-[#374151]">
+              Confirm Password
+            </Label>
+            <Input
+              id="confirmPassword"
+              type="password"
+              placeholder="Re-enter your password"
+              autoComplete="new-password"
+              className="h-12 rounded-lg border-[#e2e8f0] bg-white text-[#0f172a] placeholder:text-[#9ca3af] focus-visible:ring-[#2563eb] focus-visible:border-[#2563eb]"
+              {...register("confirmPassword")}
+            />
+            {errors.confirmPassword && (
+              <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full h-[52px] rounded-lg bg-[#2563eb] hover:bg-[#1d4ed8] hover:-translate-y-px active:translate-y-0 text-white text-[15px] font-semibold transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-y-0 mt-1"
+          >
+            {isSubmitting ? "Creating account…" : "Create account"}
+          </button>
         </form>
-      </Card>
-    </motion.div>
+
+        {/* Footer */}
+        <p className="text-center text-sm text-[#9ca3af] mt-6">
+          Already have an account?{" "}
+          <Link href="/login" className="text-[#2563eb] font-medium hover:underline">
+            Sign in
+          </Link>
+        </p>
+
+      </div>
+    </div>
   );
 }

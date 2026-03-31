@@ -55,6 +55,7 @@ export interface Lead {
   custom_fields: Record<string, unknown>;
   is_duplicate: boolean;
   opted_out: boolean;
+  qualification_status: "pending" | "qualified" | "disqualified" | "needs_review" | "in_sequence" | "responded" | "closed" | "unresponsive";
   created_at: string;
   updated_at: string;
 }
@@ -227,7 +228,10 @@ export interface TimelinePoint {
 }
 
 // ── Onboarding ──
+export type BusinessType = "products" | "services";
+export type Cadence = "aggressive" | "normal" | "gentle";
 export type BusinessGoal = "book_call" | "convert_direct";
+export type TargetAudience = "homeowners" | "small_business" | "enterprise" | "consumers";
 
 export interface SequenceMessage {
   id: string;
@@ -239,14 +243,44 @@ export interface SequenceMessage {
   body: string;
 }
 
+export interface AppointmentReminder {
+  enabled: boolean;
+  minutesBefore: number;
+  subject: string;
+  body: string;
+}
+
 export interface WizardData {
+  businessType: BusinessType | null;
+  productName: string;
+  productDescription: string;
+  websiteUrl: string;
   companyName: string;
   industry: string;
   whatYouSell: string;
+  targetAudience: TargetAudience | null;
   goal: BusinessGoal | null;
   responseSpeed: "instant" | "fast" | "same_day" | null;
+  cadence: Cadence | null;
   sequence: SequenceMessage[];
   leadSource: "webhook" | "meta" | "manual" | null;
+  appointmentReminder: AppointmentReminder | null;
+  calendarLink: string;
+  audienceType: "everyone" | "specific" | null;
+  selectedAudiences: string[];
+  leadSources: string[];
+  qualificationRules: string[];
+}
+
+// ── Business Analysis ──
+export interface BusinessAnalysis {
+  business_description: string;
+  primary_audience: string;
+  message_style: string;
+  what_you_sell: string;
+  business_type: string;
+  url_accessible: boolean;
+  detected_site_name?: string;
 }
 
 // ── Common ──

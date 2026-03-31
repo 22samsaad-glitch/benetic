@@ -37,11 +37,11 @@ export default function StepBusinessInfo({ data, onUpdate }: StepBusinessInfoPro
   return (
     <div className="space-y-8">
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-600 mb-2">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-secondary text-primary mb-2">
           <Building2 className="w-6 h-6" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900">Tell us about your business</h2>
-        <p className="text-gray-500">
+        <h2 className="text-2xl font-bold text-foreground">Tell us about your business</h2>
+        <p className="text-muted-foreground">
           We&apos;ll personalize your follow-up messages based on this.
         </p>
       </div>
@@ -49,7 +49,7 @@ export default function StepBusinessInfo({ data, onUpdate }: StepBusinessInfoPro
       <div className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="companyName" className="text-sm font-medium flex items-center gap-2">
-            <Building2 className="w-4 h-4 text-gray-400" />
+            <Building2 className="w-4 h-4 text-muted-foreground" />
             Company Name
           </Label>
           <Input
@@ -63,7 +63,7 @@ export default function StepBusinessInfo({ data, onUpdate }: StepBusinessInfoPro
 
         <div className="space-y-2">
           <Label htmlFor="industry" className="text-sm font-medium flex items-center gap-2">
-            <Briefcase className="w-4 h-4 text-gray-400" />
+            <Briefcase className="w-4 h-4 text-muted-foreground" />
             Industry
           </Label>
           <Select
@@ -85,7 +85,7 @@ export default function StepBusinessInfo({ data, onUpdate }: StepBusinessInfoPro
 
         <div className="space-y-2">
           <Label htmlFor="whatYouSell" className="text-sm font-medium flex items-center gap-2">
-            <ShoppingBag className="w-4 h-4 text-gray-400" />
+            <ShoppingBag className="w-4 h-4 text-muted-foreground" />
             What do you sell?
           </Label>
           <Input

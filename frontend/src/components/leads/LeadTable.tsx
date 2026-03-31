@@ -59,12 +59,32 @@ const SOURCE_COLORS: Record<string, string> = {
   email: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400",
   ads: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
   organic: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
-  direct: "bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400",
+  direct: "bg-muted text-muted-foreground",
 };
 
 function getSourceColor(source: string | null) {
-  if (!source) return "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400";
-  return SOURCE_COLORS[source.toLowerCase()] || "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400";
+  if (!source) return "bg-muted text-muted-foreground";
+  return SOURCE_COLORS[source.toLowerCase()] || "bg-muted text-muted-foreground";
+}
+
+const STATUS_STYLES: Record<string, { label: string; className: string }> = {
+  pending:       { label: "Pending",       className: "bg-gray-100 text-gray-600 border border-gray-200" },
+  qualified:     { label: "Qualified",     className: "bg-green-100 text-green-700 border border-green-200" },
+  disqualified:  { label: "Disqualified",  className: "bg-red-100 text-red-700 border border-red-200" },
+  needs_review:  { label: "Needs Review",  className: "bg-yellow-100 text-yellow-700 border border-yellow-200" },
+  in_sequence:   { label: "In Sequence",   className: "bg-blue-100 text-blue-700 border border-blue-200" },
+  responded:     { label: "Responded",     className: "bg-purple-100 text-purple-700 border border-purple-200" },
+  closed:        { label: "Closed",        className: "bg-gray-200 text-gray-500 border border-gray-300" },
+  unresponsive:  { label: "Unresponsive",  className: "bg-orange-100 text-orange-700 border border-orange-200" },
+};
+
+function StatusBadge({ status }: { status: string }) {
+  const s = STATUS_STYLES[status] ?? STATUS_STYLES.pending;
+  return (
+    <span className={`inline-flex items-center text-[11px] font-semibold px-2 py-0.5 rounded-full ${s.className}`}>
+      {s.label}
+    </span>
+  );
 }
 
 function getLeadName(lead: Lead) {
@@ -133,10 +153,10 @@ export default function LeadTable({
 
   return (
     <TooltipProvider delayDuration={200}>
-      <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800">
+      <div className="overflow-x-auto rounded-xl border border-border shadow-card">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-200 bg-gray-50/80 dark:border-gray-800 dark:bg-gray-900/50">
+            <tr className="border-b border-border bg-muted/50">
               <th className="w-10 px-3 py-3">
                 <Checkbox
                   checked={allSelected}
@@ -145,33 +165,33 @@ export default function LeadTable({
                 />
               </th>
               <th className="px-3 py-3 text-left">
-                <button onClick={() => handleSort("name")} className="inline-flex items-center font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200">
+                <button onClick={() => handleSort("name")} className="inline-flex items-center font-medium text-muted-foreground hover:text-foreground">
                   Name <SortIcon field="name" />
                 </button>
               </th>
               <th className="px-3 py-3 text-left">
-                <button onClick={() => handleSort("email")} className="inline-flex items-center font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200">
+                <button onClick={() => handleSort("email")} className="inline-flex items-center font-medium text-muted-foreground hover:text-foreground">
                   Email <SortIcon field="email" />
                 </button>
               </th>
               <th className="hidden px-3 py-3 text-left md:table-cell">
-                <span className="font-medium text-gray-600 dark:text-gray-400">Phone</span>
+                <span className="font-medium text-muted-foreground">Phone</span>
               </th>
               <th className="px-3 py-3 text-left">
-                <button onClick={() => handleSort("source")} className="inline-flex items-center font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200">
+                <button onClick={() => handleSort("source")} className="inline-flex items-center font-medium text-muted-foreground hover:text-foreground">
                   Source <SortIcon field="source" />
                 </button>
               </th>
-              <th className="hidden px-3 py-3 text-left lg:table-cell">
-                <span className="font-medium text-gray-600 dark:text-gray-400">Stage</span>
+              <th className="px-3 py-3 text-left">
+                <span className="font-medium text-muted-foreground">Status</span>
               </th>
               <th className="hidden px-3 py-3 text-left lg:table-cell">
-                <button onClick={() => handleSort("created_at")} className="inline-flex items-center font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200">
+                <button onClick={() => handleSort("created_at")} className="inline-flex items-center font-medium text-muted-foreground hover:text-foreground">
                   Created <SortIcon field="created_at" />
                 </button>
               </th>
               <th className="w-24 px-3 py-3 text-right">
-                <span className="font-medium text-gray-600 dark:text-gray-400">Actions</span>
+                <span className="font-medium text-muted-foreground">Actions</span>
               </th>
             </tr>
           </thead>
@@ -189,10 +209,10 @@ export default function LeadTable({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.02, duration: 0.2 }}
                   className={cn(
-                    "cursor-pointer border-b border-gray-100 transition-colors dark:border-gray-800/50",
+                    "cursor-pointer border-b border-border transition-colors",
                     isSelected
-                      ? "bg-blue-50/60 dark:bg-blue-900/10"
-                      : "hover:bg-gray-50 dark:hover:bg-gray-900/30"
+                      ? "bg-primary/5"
+                      : "hover:bg-muted/40"
                   )}
                   onMouseEnter={() => setHoveredRow(lead.id)}
                   onMouseLeave={() => setHoveredRow(null)}
@@ -212,13 +232,20 @@ export default function LeadTable({
                           {getInitials(name)}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="font-medium text-gray-900 dark:text-gray-100">{name}</span>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-medium text-foreground">{name}</span>
+                        {lead.custom_fields?.["is_test_lead"] === true && (
+                          <Badge className="text-[10px] px-1.5 py-0 h-4 bg-amber-100 text-amber-700 border border-amber-200 font-medium">
+                            🧪 Test
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </td>
-                  <td className="px-3 py-3 text-gray-600 dark:text-gray-400">
+                  <td className="px-3 py-3 text-muted-foreground">
                     {lead.email || "\u2014"}
                   </td>
-                  <td className="hidden px-3 py-3 text-gray-600 md:table-cell dark:text-gray-400">
+                  <td className="hidden px-3 py-3 text-muted-foreground md:table-cell">
                     {lead.phone || "\u2014"}
                   </td>
                   <td className="px-3 py-3">
@@ -227,19 +254,13 @@ export default function LeadTable({
                         {lead.source}
                       </Badge>
                     ) : (
-                      <span className="text-gray-400">\u2014</span>
+                      <span className="text-muted-foreground">\u2014</span>
                     )}
                   </td>
-                  <td className="hidden px-3 py-3 lg:table-cell">
-                    {stageName ? (
-                      <Badge variant="outline" className="text-xs">
-                        {stageName}
-                      </Badge>
-                    ) : (
-                      <span className="text-gray-400">\u2014</span>
-                    )}
+                  <td className="px-3 py-3">
+                    <StatusBadge status={lead.qualification_status ?? "pending"} />
                   </td>
-                  <td className="hidden px-3 py-3 text-gray-500 lg:table-cell dark:text-gray-400">
+                  <td className="hidden px-3 py-3 text-muted-foreground lg:table-cell">
                     {formatDate(lead.created_at)}
                   </td>
                   <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>

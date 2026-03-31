@@ -5,9 +5,7 @@ import { cn } from "@/lib/utils";
 import type { BusinessGoal } from "@/types";
 
 interface StepGoalProps {
-  data: {
-    goal: BusinessGoal | null;
-  };
+  data: { goal: BusinessGoal | null };
   onUpdate: (updates: { goal: BusinessGoal }) => void;
 }
 
@@ -15,7 +13,7 @@ const goals = [
   {
     value: "book_call" as BusinessGoal,
     icon: CalendarCheck,
-    title: "Book a consultation / call",
+    title: "Book a consultation",
     description: "Get leads to schedule a meeting with you",
     stages: ["New Lead", "Contacted", "Meeting Booked", "Won", "Lost"],
   },
@@ -30,15 +28,8 @@ const goals = [
 
 export default function StepGoal({ data, onUpdate }: StepGoalProps) {
   return (
-    <div className="space-y-8">
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold text-gray-900">What&apos;s your goal?</h2>
-        <p className="text-gray-500">
-          This determines your pipeline stages and dashboard layout.
-        </p>
-      </div>
-
-      <div className="space-y-4">
+    <div className="space-y-5">
+      <div className="space-y-3">
         {goals.map((goal) => {
           const Icon = goal.icon;
           const selected = data.goal === goal.value;
@@ -48,45 +39,46 @@ export default function StepGoal({ data, onUpdate }: StepGoalProps) {
               type="button"
               onClick={() => onUpdate({ goal: goal.value })}
               className={cn(
-                "w-full flex items-start gap-4 p-5 rounded-xl border-2 transition-all duration-200 text-left",
+                "w-full flex items-start gap-4 p-5 border transition-all duration-150 text-left hover:-translate-y-0.5 active:translate-y-0",
                 selected
-                  ? "border-blue-500 bg-blue-50 shadow-sm"
-                  : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                  ? "rounded-r-2xl rounded-l-none border-l-4 border-l-blue-600 border-t border-r border-b border-border bg-blue-50"
+                  : "rounded-2xl border-border bg-card hover:border-muted-foreground/40 hover:bg-muted/40"
               )}
             >
               <div
                 className={cn(
-                  "shrink-0 w-12 h-12 rounded-xl flex items-center justify-center",
-                  selected ? "bg-blue-100 text-blue-600" : "bg-gray-100 text-gray-500"
+                  "shrink-0 w-11 h-11 rounded-xl flex items-center justify-center",
+                  selected ? "bg-primary text-white" : "bg-muted text-muted-foreground"
                 )}
               >
-                <Icon className="w-6 h-6" />
+                <Icon className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p
-                  className={cn(
-                    "font-semibold",
-                    selected ? "text-blue-700" : "text-gray-900"
-                  )}
-                >
-                  {goal.title}
-                </p>
-                <p className="text-sm text-gray-500 mt-0.5">{goal.description}</p>
-                <div className="flex items-center gap-1.5 mt-3 flex-wrap">
+                <div className="flex items-center justify-between">
+                  <p className={cn("font-semibold text-sm", selected ? "text-primary" : "text-foreground")}>
+                    {goal.title}
+                  </p>
+                  <div className={cn(
+                    "w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ml-3",
+                    selected ? "border-primary bg-primary" : "border-border"
+                  )}>
+                    {selected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mt-0.5">{goal.description}</p>
+                <div className="flex items-center gap-1 mt-3 flex-wrap">
                   {goal.stages.map((stage, i) => (
-                    <span key={stage} className="flex items-center gap-1.5">
-                      <span
-                        className={cn(
-                          "text-xs px-2 py-0.5 rounded-full",
-                          selected
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-gray-100 text-gray-600"
-                        )}
-                      >
+                    <span key={stage} className="flex items-center gap-1">
+                      <span className={cn(
+                        "text-xs px-2 py-0.5 rounded-full font-medium",
+                        selected
+                          ? "bg-primary/10 text-primary"
+                          : "bg-muted text-muted-foreground"
+                      )}>
                         {stage}
                       </span>
                       {i < goal.stages.length - 1 && (
-                        <span className="text-gray-300 text-xs">&rarr;</span>
+                        <span className="text-muted-foreground/40 text-xs">›</span>
                       )}
                     </span>
                   ))}
@@ -96,6 +88,7 @@ export default function StepGoal({ data, onUpdate }: StepGoalProps) {
           );
         })}
       </div>
+
     </div>
   );
 }

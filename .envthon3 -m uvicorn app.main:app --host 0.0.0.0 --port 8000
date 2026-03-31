@@ -1,0 +1,33 @@
+# API Keys — never commit this file
+
+# Database
+DATABASE_URL=sqlite:///./benetic.db
+
+# Redis
+REDIS_URL=redis://localhost:6379/0
+
+# JWT — CHANGE THIS IN PRODUCTION
+JWT_SECRET=change-me-to-a-real-secret-in-production
+
+# Email (SendGrid)
+SENDGRID_API_KEY=
+SENDGRID_FROM_EMAIL=noreply@benetic.com
+
+# SMS (Twilio)
+TWILIO_ACCOUNT_SID=
+TWILIO_AUTH_TOKEN=
+TWILIO_FROM_PHONE=
+
+# Meta Lead Ads
+META_APP_SECRET=
+
+# Anthropic (for WAT tools)
+ANTHROPIC_API_KEY=
+
+# OpenAI (if needed)
+OPENAI_API_KEY=
+
+# App
+DEBUG=true
+ANTHROPIC_API_KEY=sk-ant-api03-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
+

@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
 from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -21,6 +22,20 @@ from app.schemas.lead import (
     LeadOut,
     LeadUpdate,
 )
+
+try:
+    from app.models.workflow import Workflow, WorkflowExecution
+    from app.workers.tasks_workflow import execute_workflow_step
+    _workflow_available = True
+except Exception:
+    _workflow_available = False
+
+
+class TestLeadPayload(BaseModel):
+    name: str = "Demo Test Lead"
+    email: str
+    phone: str = "(555) 000-0000"
+
 
 router = APIRouter(prefix="/api/v1/leads", tags=["leads"])
 
@@ -83,6 +98,69 @@ def create_lead(
     db.commit()
     db.refresh(lead)
     return lead
+
+
+@router.post("/test", status_code=201)
+def create_test_lead(
+    payload: TestLeadPayload,
+    tenant: Tenant = Depends(get_current_tenant),
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Create a test lead and trigger the first workflow execution."""
+    parts = payload.name.strip().split(" ", 1)
+    lead = Lead(
+        tenant_id=tenant.id,
+        first_name=parts[0],
+        last_name=parts[1] if len(parts) > 1 else "",
+        email=payload.email,
+        phone=payload.phone,
+        source="test",
+        custom_fields={"is_test_lead": True},
+    )
+    db.add(lead)
+    db.flush()
+
+    event = LeadEvent(
+        tenant_id=tenant.id,
+        lead_id=lead.id,
+        event_type="created",
+        metadata_={"source": "test", "triggered_by": str(user.id)},
+    )
+    db.add(event)
+    db.commit()
+    db.refresh(lead)
+
+    # Trigger active workflow
+    workflow_triggered = False
+    if _workflow_available:
+        wf = (
+            db.query(Workflow)
+            .filter_by(tenant_id=tenant.id, trigger_type="on_lead_created", is_active=True)
+            .first()
+        )
+        if wf and wf.steps:
+            execution = WorkflowExecution(
+                workflow_id=wf.id,
+                lead_id=lead.id,
+                tenant_id=tenant.id,
+                current_step=0,
+                status="running",
+                next_run_at=datetime.now(timezone.utc),
+            )
+            db.add(execution)
+            db.commit()
+            try:
+                execute_workflow_step.delay(str(execution.id))
+                workflow_triggered = True
+            except Exception:
+                pass
+
+    return {
+        "lead_id": str(lead.id),
+        "workflow_triggered": workflow_triggered,
+        "email": lead.email,
+    }
 
 
 @router.get("/{lead_id}", response_model=LeadOut)

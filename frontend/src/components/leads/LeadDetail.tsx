@@ -158,13 +158,13 @@ export default function LeadDetail({ leadId, open, onClose, onEdit, onDelete }: 
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed inset-y-0 right-0 z-50 flex w-full max-w-lg flex-col bg-white shadow-2xl dark:bg-gray-950"
+            className="fixed inset-y-0 right-0 z-50 flex w-full max-w-lg flex-col bg-card shadow-card-hover"
           >
             {/* Header */}
-            <div className="flex items-start justify-between border-b px-6 py-4 dark:border-gray-800">
+            <div className="flex items-start justify-between border-b px-6 py-4 border-border">
               <div className="flex items-center gap-3">
                 {leadLoading ? (
-                  <div className="h-10 w-10 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800" />
+                  <div className="h-10 w-10 animate-pulse rounded-full bg-muted" />
                 ) : (
                   <Avatar className="h-10 w-10">
                     <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-sm font-semibold text-white">
@@ -175,13 +175,13 @@ export default function LeadDetail({ leadId, open, onClose, onEdit, onDelete }: 
                 <div>
                   {leadLoading ? (
                     <>
-                      <div className="h-5 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
-                      <div className="mt-1 h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
+                      <div className="h-5 w-32 animate-pulse rounded bg-muted" />
+                      <div className="mt-1 h-4 w-48 animate-pulse rounded bg-muted" />
                     </>
                   ) : (
                     <>
-                      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{name}</h2>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">{lead?.email || "No email"}</p>
+                      <h2 className="text-lg font-semibold text-foreground">{name}</h2>
+                      <p className="text-sm text-muted-foreground">{lead?.email || "No email"}</p>
                     </>
                   )}
                 </div>
@@ -196,36 +196,36 @@ export default function LeadDetail({ leadId, open, onClose, onEdit, onDelete }: 
               {leadLoading ? (
                 <div className="space-y-4 p-6">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className="h-12 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-900" />
+                    <div key={i} className="h-12 animate-pulse rounded-lg bg-muted" />
                   ))}
                 </div>
               ) : lead ? (
                 <div className="space-y-6 p-6">
                   {/* Contact Info */}
                   <div className="space-y-3">
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Contact</h3>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Contact</h3>
                     <div className="space-y-2">
                       {lead.email && (
                         <div className="flex items-center gap-2.5 text-sm">
-                          <Mail className="h-4 w-4 text-gray-400" />
-                          <span className="text-gray-700 dark:text-gray-300">{lead.email}</span>
+                          <Mail className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-foreground">{lead.email}</span>
                         </div>
                       )}
                       {lead.phone && (
                         <div className="flex items-center gap-2.5 text-sm">
-                          <Phone className="h-4 w-4 text-gray-400" />
-                          <span className="text-gray-700 dark:text-gray-300">{lead.phone}</span>
+                          <Phone className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-foreground">{lead.phone}</span>
                         </div>
                       )}
                       {lead.source && (
                         <div className="flex items-center gap-2.5 text-sm">
-                          <Globe className="h-4 w-4 text-gray-400" />
-                          <span className="text-gray-700 dark:text-gray-300">{lead.source}</span>
+                          <Globe className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-foreground">{lead.source}</span>
                         </div>
                       )}
                       <div className="flex items-center gap-2.5 text-sm">
-                        <Calendar className="h-4 w-4 text-gray-400" />
-                        <span className="text-gray-700 dark:text-gray-300">
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-foreground">
                           Created {format(new Date(lead.created_at), "MMM d, yyyy 'at' h:mm a")}
                         </span>
                       </div>
@@ -236,10 +236,10 @@ export default function LeadDetail({ leadId, open, onClose, onEdit, onDelete }: 
 
                   {/* Score */}
                   <div className="space-y-3">
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Lead Score</h3>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Lead Score</h3>
                     <div className="flex items-center gap-3">
                       <div className="flex-1">
-                        <div className="h-2.5 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+                        <div className="h-2.5 overflow-hidden rounded-full bg-muted">
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${lead.score}%` }}
@@ -248,7 +248,7 @@ export default function LeadDetail({ leadId, open, onClose, onEdit, onDelete }: 
                           />
                         </div>
                       </div>
-                      <span className="text-lg font-bold tabular-nums text-gray-900 dark:text-gray-100">{lead.score}</span>
+                      <span className="text-lg font-bold tabular-nums text-foreground">{lead.score}</span>
                     </div>
                   </div>
 
@@ -256,7 +256,7 @@ export default function LeadDetail({ leadId, open, onClose, onEdit, onDelete }: 
 
                   {/* Stage */}
                   <div className="space-y-3">
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Pipeline Stage</h3>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Pipeline Stage</h3>
                     <Select
                       value={lead.stage_id || ""}
                       onValueChange={(val) => moveStageMutation.mutate({ stageId: val })}
@@ -278,7 +278,7 @@ export default function LeadDetail({ leadId, open, onClose, onEdit, onDelete }: 
 
                   {/* Assigned To */}
                   <div className="space-y-3">
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Assigned To</h3>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Assigned To</h3>
                     <Select
                       value={lead.assigned_to || ""}
                       onValueChange={(val) => assignMutation.mutate({ userId: val })}
@@ -301,36 +301,36 @@ export default function LeadDetail({ leadId, open, onClose, onEdit, onDelete }: 
                     <>
                       <Separator />
                       <div className="space-y-3">
-                        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">UTM Data</h3>
+                        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">UTM Data</h3>
                         <div className="grid grid-cols-2 gap-2">
                           {lead.utm_source && (
-                            <div className="rounded-md bg-gray-50 px-3 py-2 dark:bg-gray-900">
-                              <p className="text-[10px] font-medium uppercase text-gray-400">Source</p>
-                              <p className="text-sm text-gray-700 dark:text-gray-300">{lead.utm_source}</p>
+                            <div className="rounded-lg bg-muted px-3 py-2">
+                              <p className="text-[10px] font-medium uppercase text-muted-foreground">Source</p>
+                              <p className="text-sm text-foreground">{lead.utm_source}</p>
                             </div>
                           )}
                           {lead.utm_medium && (
-                            <div className="rounded-md bg-gray-50 px-3 py-2 dark:bg-gray-900">
-                              <p className="text-[10px] font-medium uppercase text-gray-400">Medium</p>
-                              <p className="text-sm text-gray-700 dark:text-gray-300">{lead.utm_medium}</p>
+                            <div className="rounded-lg bg-muted px-3 py-2">
+                              <p className="text-[10px] font-medium uppercase text-muted-foreground">Medium</p>
+                              <p className="text-sm text-foreground">{lead.utm_medium}</p>
                             </div>
                           )}
                           {lead.utm_campaign && (
-                            <div className="rounded-md bg-gray-50 px-3 py-2 dark:bg-gray-900">
-                              <p className="text-[10px] font-medium uppercase text-gray-400">Campaign</p>
-                              <p className="text-sm text-gray-700 dark:text-gray-300">{lead.utm_campaign}</p>
+                            <div className="rounded-lg bg-muted px-3 py-2">
+                              <p className="text-[10px] font-medium uppercase text-muted-foreground">Campaign</p>
+                              <p className="text-sm text-foreground">{lead.utm_campaign}</p>
                             </div>
                           )}
                           {lead.utm_term && (
-                            <div className="rounded-md bg-gray-50 px-3 py-2 dark:bg-gray-900">
-                              <p className="text-[10px] font-medium uppercase text-gray-400">Term</p>
-                              <p className="text-sm text-gray-700 dark:text-gray-300">{lead.utm_term}</p>
+                            <div className="rounded-lg bg-muted px-3 py-2">
+                              <p className="text-[10px] font-medium uppercase text-muted-foreground">Term</p>
+                              <p className="text-sm text-foreground">{lead.utm_term}</p>
                             </div>
                           )}
                           {lead.utm_content && (
-                            <div className="rounded-md bg-gray-50 px-3 py-2 dark:bg-gray-900">
-                              <p className="text-[10px] font-medium uppercase text-gray-400">Content</p>
-                              <p className="text-sm text-gray-700 dark:text-gray-300">{lead.utm_content}</p>
+                            <div className="rounded-lg bg-muted px-3 py-2">
+                              <p className="text-[10px] font-medium uppercase text-muted-foreground">Content</p>
+                              <p className="text-sm text-foreground">{lead.utm_content}</p>
                             </div>
                           )}
                         </div>
@@ -343,12 +343,12 @@ export default function LeadDetail({ leadId, open, onClose, onEdit, onDelete }: 
                     <>
                       <Separator />
                       <div className="space-y-3">
-                        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Custom Fields</h3>
+                        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Custom Fields</h3>
                         <div className="space-y-2">
                           {Object.entries(lead.custom_fields).map(([key, value]) => (
-                            <div key={key} className="flex items-center justify-between rounded-md bg-gray-50 px-3 py-2 dark:bg-gray-900">
-                              <span className="text-xs font-medium text-gray-500 dark:text-gray-400">{key}</span>
-                              <span className="text-sm text-gray-700 dark:text-gray-300">{String(value)}</span>
+                            <div key={key} className="flex items-center justify-between rounded-lg bg-muted px-3 py-2">
+                              <span className="text-xs font-medium text-muted-foreground">{key}</span>
+                              <span className="text-sm text-foreground">{String(value)}</span>
                             </div>
                           ))}
                         </div>
@@ -360,28 +360,28 @@ export default function LeadDetail({ leadId, open, onClose, onEdit, onDelete }: 
 
                   {/* Activity Timeline */}
                   <div className="space-y-3">
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Activity</h3>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Activity</h3>
                     {eventsLoading ? (
                       <div className="space-y-3">
                         {Array.from({ length: 3 }).map((_, i) => (
-                          <div key={i} className="h-10 animate-pulse rounded bg-gray-100 dark:bg-gray-900" />
+                          <div key={i} className="h-10 animate-pulse rounded bg-muted" />
                         ))}
                       </div>
                     ) : events.length === 0 ? (
-                      <p className="text-sm text-gray-400">No activity yet</p>
+                      <p className="text-sm text-muted-foreground">No activity yet</p>
                     ) : (
                       <div className="relative space-y-0">
                         {events.map((event, i) => (
                           <div key={event.id} className="relative flex gap-3 pb-4">
                             {i < events.length - 1 && (
-                              <div className="absolute left-[11px] top-6 h-full w-px bg-gray-200 dark:bg-gray-800" />
+                              <div className="absolute left-[11px] top-6 h-full w-px bg-muted" />
                             )}
-                            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
                               {getEventIcon(event.event_type)}
                             </div>
                             <div className="flex-1 pt-0.5">
-                              <p className="text-sm text-gray-700 dark:text-gray-300">{getEventLabel(event)}</p>
-                              <p className="text-xs text-gray-400">
+                              <p className="text-sm text-foreground">{getEventLabel(event)}</p>
+                              <p className="text-xs text-muted-foreground">
                                 {formatDistanceToNow(new Date(event.created_at), { addSuffix: true })}
                               </p>
                             </div>
@@ -396,7 +396,7 @@ export default function LeadDetail({ leadId, open, onClose, onEdit, onDelete }: 
 
             {/* Footer Actions */}
             {lead && (
-              <div className="flex items-center justify-between border-t px-6 py-3 dark:border-gray-800">
+              <div className="flex items-center justify-between border-t px-6 py-3 border-border">
                 <Button
                   variant="destructive"
                   size="sm"

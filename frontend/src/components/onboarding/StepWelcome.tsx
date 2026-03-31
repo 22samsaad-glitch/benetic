@@ -29,14 +29,14 @@ export default function StepWelcome() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 200, damping: 15 }}
-          className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 mb-2"
+          className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary text-primary mb-2"
         >
           <Zap className="w-8 h-8" />
         </motion.div>
-        <h2 className="text-3xl font-bold text-gray-900">
+        <h2 className="text-3xl font-bold text-foreground">
           Follow up faster, close more deals
         </h2>
-        <p className="text-gray-500 text-lg max-w-md mx-auto">
+        <p className="text-muted-foreground text-lg max-w-md mx-auto">
           Set up your automated lead follow-up in under 5 minutes.
           No technical skills needed.
         </p>
@@ -51,14 +51,14 @@ export default function StepWelcome() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 + i * 0.15 }}
-              className="flex items-start gap-4 p-4 rounded-xl bg-white border border-gray-100 shadow-sm"
+              className="flex items-start gap-4 p-4 rounded-xl bg-card border border-border shadow-card"
             >
-              <div className="shrink-0 w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+              <div className="shrink-0 w-10 h-10 rounded-lg bg-muted text-primary flex items-center justify-center">
                 <Icon className="w-5 h-5" />
               </div>
               <div>
-                <p className="font-semibold text-gray-900 text-sm">{feature.title}</p>
-                <p className="text-sm text-gray-500 mt-0.5">{feature.description}</p>
+                <p className="font-semibold text-foreground text-sm">{feature.title}</p>
+                <p className="text-sm text-muted-foreground mt-0.5">{feature.description}</p>
               </div>
             </motion.div>
           );

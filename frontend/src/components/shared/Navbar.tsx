@@ -2,13 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Bell, LogOut, Search, Settings } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { LogOut, Settings } from "lucide-react";
 import { getInitials } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,11 +17,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const pageTitles: Record<string, string> = {
-  "/leads": "Leads",
+  "/leads": "Dashboard",
   "/booked": "Booked Calls",
-  "/converted": "Converted Leads",
-  "/pipelines": "Pipelines",
-  "/workflows": "Follow-up Sequences",
+  "/converted": "Converted",
+  "/pipelines": "Pipeline",
+  "/workflows": "Sequences",
   "/templates": "Templates",
   "/analytics": "Analytics",
   "/integrations": "Lead Sources",
@@ -40,78 +38,45 @@ export function Navbar() {
   )?.[1] ?? "Dashboard";
 
   return (
-    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
-      {/* Left: Page title */}
-      <div>
-        <h1 className="text-lg font-semibold">{pageTitle}</h1>
-      </div>
+    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-gray-100 bg-white px-6">
+      <h1 className="text-xl font-bold text-gray-900">{pageTitle}</h1>
 
-      {/* Right: Search, Notifications, User */}
-      <div className="flex items-center gap-2">
-        {/* Search */}
-        <Button
-          variant="outline"
-          size="sm"
-          className="hidden sm:flex items-center gap-2 text-muted-foreground font-normal w-56 justify-start"
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          className="inline-flex items-center gap-1.5 bg-[#2563eb] hover:bg-blue-700 text-white rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-150 hover:opacity-90"
         >
-          <Search className="h-4 w-4" />
-          <span>Search...</span>
-          <kbd className="pointer-events-none ml-auto inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-            <span className="text-xs">&#8984;</span>K
-          </kbd>
-        </Button>
+          <span className="text-sm font-bold leading-none">+</span> New
+        </button>
 
-        {/* Mobile search icon */}
-        <Button variant="ghost" size="icon" className="sm:hidden h-9 w-9">
-          <Search className="h-4 w-4" />
-        </Button>
-
-        {/* Notifications */}
-        <Button variant="ghost" size="icon" className="relative h-9 w-9">
-          <Bell className="h-4 w-4" />
-          <Badge
-            variant="destructive"
-            className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 flex items-center justify-center text-[10px]"
-          >
-            3
-          </Badge>
-        </Button>
-
-        {/* User dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+            <Button variant="ghost" className="h-8 w-8 rounded-full p-0">
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="text-xs">
+                <AvatarFallback className="text-xs font-bold bg-blue-100 text-[#2563eb] rounded-full">
                   {user?.name ? getInitials(user.name) : "U"}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  {user?.name ?? "User"}
-                </p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  {user?.email ?? ""}
-                </p>
-              </div>
+          <DropdownMenuContent align="end" className="w-52 rounded-xl">
+            <DropdownMenuLabel className="font-normal py-2.5">
+              <p className="text-sm font-semibold leading-none">{user?.name ?? "User"}</p>
+              <p className="text-xs text-muted-foreground mt-1">{user?.email ?? ""}</p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/settings" className="cursor-pointer">
-                <Settings className="mr-2 h-4 w-4" />
+              <Link href="/settings" className="cursor-pointer rounded-lg">
+                <Settings className="mr-2 h-3.5 w-3.5" />
                 Settings
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={logout}
-              className="cursor-pointer text-destructive focus:text-destructive"
+              className="cursor-pointer text-destructive focus:text-destructive rounded-lg"
             >
-              <LogOut className="mr-2 h-4 w-4" />
+              <LogOut className="mr-2 h-3.5 w-3.5" />
               Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>

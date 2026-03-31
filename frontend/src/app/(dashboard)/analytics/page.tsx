@@ -52,7 +52,7 @@ export default function AnalyticsPage() {
   });
 
   const statCards = [
-    { label: "Total Leads", value: overview?.total_leads ?? 0, icon: Users, color: "text-blue-600" },
+    { label: "Total Leads", value: overview?.total_leads ?? 0, icon: Users, color: "text-primary" },
     { label: "This Week", value: overview?.leads_this_week ?? 0, icon: TrendingUp, color: "text-emerald-600" },
     { label: "This Month", value: overview?.leads_this_month ?? 0, icon: Target, color: "text-violet-600" },
     { label: "Avg Score", value: overview?.avg_score?.toFixed(1) ?? "0", icon: BarChart3, color: "text-amber-600" },

@@ -63,6 +63,10 @@ def process_inbound_lead(
     existing = find_duplicate(db, tenant.id, email, phone)
     is_duplicate = existing is not None
 
+    # Determine initial qualification status based on tenant settings
+    qual_rules = tenant.settings.get("qualification_rules", []) if tenant.settings else []
+    initial_status = "pending" if qual_rules else "qualified"
+
     # Create lead
     lead = Lead(
         tenant_id=tenant.id,
@@ -80,6 +84,7 @@ def process_inbound_lead(
         raw_payload=raw_payload or {},
         is_duplicate=is_duplicate,
         duplicate_of=existing.id if existing else None,
+        qualification_status=initial_status,
     )
 
     # Assign to default pipeline stage (only for non-duplicates)

@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Sidebar } from "@/components/shared/Sidebar";
 import { Navbar } from "@/components/shared/Navbar";
 import { cn } from "@/lib/utils";
+import { DashboardTutorial } from "@/components/dashboard/DashboardTutorial";
 
 export default function DashboardLayout({
   children,
@@ -49,15 +50,17 @@ export default function DashboardLayout({
       <div
         className={cn(
           "flex flex-1 flex-col transition-all duration-200",
-          sidebarCollapsed ? "ml-16" : "ml-64"
+          sidebarCollapsed ? "ml-14" : "ml-60"
         )}
       >
         <Navbar />
 
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto bg-[#f0f4ff] p-6">
           {children}
         </main>
       </div>
+
+      <DashboardTutorial />
     </div>
   );
 }

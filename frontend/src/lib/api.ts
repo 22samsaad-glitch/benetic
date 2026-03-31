@@ -23,12 +23,14 @@ import type {
   SourceBreakdown,
   PipelineSummary,
   TimelinePoint,
+  BusinessAnalysis,
 } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 const api = axios.create({
   baseURL: `${API_URL}/api/v1`,
+  timeout: 15000,
   headers: {
     "Content-Type": "application/json",
     "ngrok-skip-browser-warning": "true",
@@ -103,6 +105,10 @@ export const auth = {
     const res = await api.get<User>("/auth/me");
     return res.data;
   },
+  tenant: async () => {
+    const res = await api.get<{ id: string; name: string; slug: string; webhook_key: string; settings: Record<string, unknown>; created_at: string }>("/auth/me/tenant");
+    return res.data;
+  },
   logout: () => {
     clearTokens();
   },
@@ -152,6 +158,10 @@ export const leads = {
   },
   exportCsv: async () => {
     const res = await api.get("/leads/export", { responseType: "blob" });
+    return res.data;
+  },
+  createTest: async (data: { name: string; email: string; phone: string }) => {
+    const res = await api.post<{ lead_id: string; workflow_triggered: boolean; email: string }>("/leads/test", data);
     return res.data;
   },
 };
@@ -331,6 +341,31 @@ export const team = {
   },
   deactivate: async (userId: string) => {
     const res = await api.post(`/team/${userId}/deactivate`);
+    return res.data;
+  },
+};
+
+// ── Business ──
+export const business = {
+  analyze: async (data: { company_name: string; website_url?: string; website_text?: string; detected_site_name?: string }) => {
+    const res = await api.post<BusinessAnalysis>("/business/analyze", data);
+    return res.data;
+  },
+  scrapeQualificationRules: async (website_url: string) => {
+    const res = await api.post<{
+      company_name: string;
+      service_area: string;
+      job_types: string[];
+      min_budget: string;
+      exclusions: string[];
+      raw_rules: { field: string; description: string }[];
+      website_text_preview: string;
+      url_accessible: boolean;
+    }>("/business/scrape-qualification-rules", { website_url });
+    return res.data;
+  },
+  saveQualificationRules: async (rules: string[], website_url?: string, company_name?: string) => {
+    const res = await api.post("/business/save-qualification-rules", { rules, website_url, company_name });
     return res.data;
   },
 };
