@@ -14,9 +14,9 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
-# Hard-require DATABASE_URL — raises KeyError immediately if not set,
-# so we never silently fall back to SQLite on Render/Railway.
-_raw_url = os.environ["DATABASE_URL"]
+_raw_url = os.environ.get("DATABASE_URL", "")
+if not _raw_url:
+    raise RuntimeError("DATABASE_URL environment variable is not set")
 if _raw_url.startswith("postgres://"):
     _raw_url = _raw_url.replace("postgres://", "postgresql://", 1)
 
