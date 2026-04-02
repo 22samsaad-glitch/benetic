@@ -3,6 +3,7 @@ import re
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from jose import JWTError, jwt
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -130,4 +131,26 @@ def me_tenant(user: User = Depends(get_current_user), db: Session = Depends(get_
     tenant = db.query(Tenant).filter_by(id=user.tenant_id).first()
     if not tenant:
         raise HTTPException(404, "Tenant not found")
+    return tenant
+
+
+class TenantSettingsUpdate(BaseModel):
+    settings: dict
+
+
+@router.patch("/me/tenant/settings", response_model=TenantOut)
+def update_tenant_settings(
+    payload: TenantSettingsUpdate,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Merge the given keys into the tenant's settings JSON."""
+    tenant = db.query(Tenant).filter_by(id=user.tenant_id).first()
+    if not tenant:
+        raise HTTPException(404, "Tenant not found")
+    merged = dict(tenant.settings or {})
+    merged.update(payload.settings)
+    tenant.settings = merged
+    db.commit()
+    db.refresh(tenant)
     return tenant

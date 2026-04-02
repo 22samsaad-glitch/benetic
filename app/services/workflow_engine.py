@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 from app.models.lead import Lead, LeadEvent
 from app.models.task import Task
 from app.models.template import MessageTemplate
+from app.models.tenant import Tenant, User
 from app.models.workflow import Workflow, WorkflowExecution, WorkflowStep
 
 logger = logging.getLogger(__name__)
@@ -164,7 +165,7 @@ def execute_step(db: Session, execution_id: uuid.UUID) -> bool:
 
 
 def _handle_send_email(db: Session, lead: Lead, config: dict) -> bool:
-    """Dispatch an email send task."""
+    """Dispatch an email send task (Option C: From Jetleads, Reply-To owner)."""
     template_id = config.get("template_id")
     if not template_id:
         logger.warning("send_email step missing template_id")
@@ -176,6 +177,16 @@ def _handle_send_email(db: Session, lead: Lead, config: dict) -> bool:
 
     body, subject = render_template(template.body, lead, template.subject)
 
+    # Resolve the owner's display name and real email for From/Reply-To
+    tenant = db.query(Tenant).filter_by(id=lead.tenant_id).first()
+    owner = db.query(User).filter_by(tenant_id=lead.tenant_id, role="owner").first()
+
+    # from_name: prefer tenant.settings["from_name"], fall back to owner name, then tenant name
+    from_name = ""
+    if tenant:
+        from_name = (tenant.settings or {}).get("from_name", "") or (owner.name if owner else "") or tenant.name
+    reply_to = owner.email if owner else ""
+
     from app.workers.tasks_email import send_email
     send_email.delay(
         tenant_id=str(lead.tenant_id),
@@ -184,6 +195,8 @@ def _handle_send_email(db: Session, lead: Lead, config: dict) -> bool:
         to_name=lead.first_name or "",
         subject=subject or "No subject",
         html_body=body,
+        from_name=from_name,
+        reply_to=reply_to,
     )
     return True
 

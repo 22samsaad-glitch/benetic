@@ -29,7 +29,9 @@ class Settings(BaseSettings):
     RATE_LIMIT_WEBHOOKS: str = "200/minute"
     RATE_LIMIT_AUTH: str = "10/minute"
 
-    # Email (stubbed)
+    # Email — Resend (primary) / SendGrid (fallback)
+    RESEND_API_KEY: str = ""
+    RESEND_FROM_EMAIL: str = "Jetleads <onboarding@resend.dev>"
     SENDGRID_API_KEY: str = ""
     SENDGRID_FROM_EMAIL: str = "noreply@jetleads.io"
 

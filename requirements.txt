@@ -25,6 +25,7 @@ redis==5.2.1
 slowapi==0.1.9
 
 # Email & SMS (stubbed for now)
+resend>=2.0.0
 sendgrid==6.11.0
 twilio==9.4.3
 

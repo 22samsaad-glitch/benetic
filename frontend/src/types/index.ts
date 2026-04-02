@@ -270,6 +270,7 @@ export interface WizardData {
   selectedAudiences: string[];
   leadSources: string[];
   qualificationRules: string[];
+  fromName: string;
 }
 
 // ── Business Analysis ──

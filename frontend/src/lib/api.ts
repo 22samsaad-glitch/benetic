@@ -109,6 +109,10 @@ export const auth = {
     const res = await api.get<{ id: string; name: string; slug: string; webhook_key: string; settings: Record<string, unknown>; created_at: string }>("/auth/me/tenant");
     return res.data;
   },
+  updateTenantSettings: async (settings: Record<string, unknown>) => {
+    const res = await api.patch<{ id: string; name: string; slug: string; settings: Record<string, unknown> }>("/auth/me/tenant/settings", { settings });
+    return res.data;
+  },
   logout: () => {
     clearTokens();
   },

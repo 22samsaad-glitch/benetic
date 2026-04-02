@@ -129,11 +129,13 @@ interface StepPart3Props {
     whatYouSell: string;
     calendarLink: string;
     appointmentReminder: { enabled: boolean; minutesBefore: number; subject: string; body: string } | null;
+    fromName?: string;
   };
   onUpdate: (updates: {
     sequence?: SequenceMessage[];
     calendarLink?: string;
     appointmentReminder?: { enabled: boolean; minutesBefore: number; subject: string; body: string } | null;
+    fromName?: string;
   }) => void;
   onComplete: () => void;
   onBack?: () => void;
@@ -142,6 +144,8 @@ interface StepPart3Props {
 /* ─── Component ───────────────────────────────────────────────────────────── */
 
 export default function StepPart3({ data, onUpdate, onComplete, onBack }: StepPart3Props) {
+  const [fromName, setFromName] = useState(data.fromName ?? "");
+
   const initNum = Math.min(Math.max(data.sequence.length, 2), 7);
 
   const [expanded, setExpanded]         = useState<Set<number>>(new Set([1, 2, 3, 4]));
@@ -271,6 +275,31 @@ export default function StepPart3({ data, onUpdate, onComplete, onBack }: StepPa
 
   return (
     <div className="space-y-4">
+
+      {/* ── Display name for emails ──────────────────────────────────────── */}
+      <div className="rounded-2xl border border-[#e5e7eb] bg-white px-5 py-4">
+        <label className="block text-[13px] font-semibold text-[#0f172a] mb-1">
+          Your display name for emails
+        </label>
+        <p className="text-[12px] text-[#9ca3af] mb-3">
+          Leads will see this as the sender — e.g. &quot;Mike - Richardson Roofing&quot;
+        </p>
+        <input
+          type="text"
+          value={fromName}
+          onChange={(e) => {
+            setFromName(e.target.value);
+            onUpdate({ fromName: e.target.value });
+          }}
+          placeholder="Mike - Richardson Roofing"
+          className="w-full h-11 rounded-xl border border-[#e5e7eb] bg-[#f8fafc] px-3 text-[13px] text-[#0f172a] placeholder:text-[#9ca3af] outline-none focus:ring-2 focus:ring-[#2563eb]/20 focus:border-[#2563eb] transition-all"
+        />
+        {fromName && (
+          <p className="mt-2 text-[11px] text-[#64748b] font-mono">
+            From: {fromName} &lt;onboarding@resend.dev&gt;
+          </p>
+        )}
+      </div>
 
       {/* Section progress pills */}
       <div className="flex items-center justify-between px-1 pb-1">

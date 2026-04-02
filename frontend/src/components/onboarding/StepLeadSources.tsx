@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Globe, Code2, CheckCircle2, Copy, Check, ChevronDown, ArrowRight, BookOpen, Zap, ArrowLeft } from "lucide-react";
+import { Globe, CheckCircle2, Copy, Check, ChevronDown, ArrowRight, BookOpen, Zap, ArrowLeft } from "lucide-react";
 import { auth } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
@@ -453,9 +453,14 @@ export default function StepLeadSources({ data, onUpdate, onComplete, isSubmitti
                         )}
                       </button>
                     </div>
-                    <div className="flex items-center gap-2 rounded-xl bg-[#f8fafc] border border-[#e5e7eb] px-3 py-2.5">
-                      <Code2 className="h-3.5 w-3.5 text-[#9ca3af] shrink-0" />
-                      <span className="font-mono text-[12px] text-[#374151] truncate">{whUrl || "Loading..."}</span>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        readOnly
+                        value={whUrl || "Loading..."}
+                        className="flex-1 h-10 rounded-xl bg-[#f8fafc] border border-[#e5e7eb] px-3 text-[12px] font-mono text-[#374151] select-all cursor-text outline-none"
+                        onFocus={(e) => e.target.select()}
+                      />
                     </div>
                   </div>
 

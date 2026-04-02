@@ -7,9 +7,37 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { pipelines, templates, workflows } from "@/lib/api";
+import { pipelines, templates, workflows, auth } from "@/lib/api";
 import type { WizardData, BusinessType, BusinessGoal, Cadence, SequenceMessage } from "@/types";
 import ReactConfetti from "react-confetti";
+
+/* ─── Error Boundary ─────────────────────────────────────────────────────── */
+class WizardErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { error: Error | null }
+> {
+  state = { error: null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="flex h-screen items-center justify-center px-6" style={{ background: "#f5f6f8" }}>
+          <div className="max-w-sm text-center space-y-4">
+            <p className="text-lg font-semibold text-[#0f172a]">Something went wrong</p>
+            <p className="text-sm text-[#64748b]">{(this.state.error as Error).message}</p>
+            <button
+              onClick={() => { this.setState({ error: null }); window.location.reload(); }}
+              className="px-4 py-2 rounded-lg bg-[#0454ff] text-white text-sm font-semibold"
+            >
+              Reload
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 import StepBusinessAnalysis    from "@/components/onboarding/StepBusinessAnalysis";
 import StepQualificationRules  from "@/components/onboarding/StepQualificationRules";
@@ -130,6 +158,7 @@ const INITIAL_DATA: WizardData = {
   selectedAudiences: [],
   leadSources: [],
   qualificationRules: [],
+  fromName: "",
 };
 
 /* ─── Animation variants ─────────────────────────────────────────────────── */
@@ -180,6 +209,10 @@ function StepProgress({ currentStep, totalSteps }: { currentStep: number; totalS
 /* ─── Page ───────────────────────────────────────────────────────────────── */
 
 export default function SetupPage() {
+  return <WizardErrorBoundary><SetupPageInner /></WizardErrorBoundary>;
+}
+
+function SetupPageInner() {
   const router = useRouter();
   const [currentStep,     setCurrentStep]     = useState(0);
   const [direction,       setDirection]       = useState(0);
@@ -240,6 +273,11 @@ export default function SetupPage() {
   const submitWizard = async () => {
     setIsSubmitting(true);
     try {
+      // Save from_name to tenant settings so the workflow engine can use it
+      if (data.fromName) {
+        await auth.updateTenantSettings({ from_name: data.fromName });
+      }
+
       const pipeline = await pipelines.create({ name: "Default Pipeline" });
       const stages   = getStagesForGoal(data.goal!);
       for (let i = 0; i < stages.length; i++) {
@@ -614,6 +652,7 @@ export default function SetupPage() {
                             whatYouSell:         data.whatYouSell,
                             calendarLink:        data.calendarLink,
                             appointmentReminder: data.appointmentReminder,
+                            fromName:            data.fromName,
                           }}
                           onUpdate={updateData}
                           onComplete={handleGoToSources}
